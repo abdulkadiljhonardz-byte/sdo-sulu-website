@@ -12,6 +12,20 @@ A modular Django portal for official SDO Sulu news, school directory, issuances,
 
 SQLite is used only when `DATABASE_URL` is absent; use PostgreSQL in every shared or production environment.
 
+## Railpack / Railway deployment
+
+The repository includes a root `requirements.txt` for Python build detection and
+an executable `start.sh` production entrypoint. The entrypoint applies database
+migrations, collects static assets, and starts Gunicorn on the platform-provided
+`PORT`.
+
+Provision PostgreSQL and configure at least `DATABASE_URL`,
+`DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `DJANGO_ALLOWED_HOSTS`, and
+`DJANGO_CSRF_TRUSTED_ORIGINS` in the deployment environment. Set the service
+start command to `./start.sh` if it is not detected automatically. Uploaded
+media requires a persistent volume or an object-storage backend because the
+default PaaS filesystem is ephemeral.
+
 ## Security and operations
 
 The settings enforce CSRF middleware, ORM-based queries, HttpOnly/SameSite cookies, secure cookies and HSTS outside debug mode, strong passwords, clickjacking protection, and safe storage names for service attachments. Keep `DEBUG=False`, do not commit `.env`, serve HTTPS through Nginx, and restrict media/private attachments at the application layer.

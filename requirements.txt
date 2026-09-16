@@ -1,0 +1,2 @@
+# Root dependency manifest for Railpack/Railway and other PaaS builders.
+-r requirements/production.txt
