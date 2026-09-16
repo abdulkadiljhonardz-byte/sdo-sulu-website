@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="{% static 'css/navigation.css' %}?v=20260916.2">
   {% block extra_head %}{% endblock %}
   <link rel="stylesheet" href="{% static 'css/compact-theme.css' %}?v=20260916.2">
-  <link rel="stylesheet" href="{% static 'css/portal-polish.css' %}?v=20260916.2">
+  <link rel="stylesheet" href="{% static 'css/portal-polish.css' %}?v=20260917.1">
   <link rel="stylesheet" href="{% static 'css/home-clean.css' %}?v=20260916.2">
   <link rel="stylesheet" href="{% static 'css/animations.css' %}?v=20260916.2">
   <link rel="stylesheet" href="{% static 'css/home-better.css' %}?v=20260916.2">
@@ -41,8 +41,7 @@
   <link rel="stylesheet" href="{% static 'css/home-memos.css' %}?v=20260917.3">
   <link rel="stylesheet" href="{% static 'css/reference-hero.css' %}?v=20260916.6">
   <link rel="stylesheet" href="{% static 'css/home-enhancements.css' %}?v=20260917.5">
-  <link rel="stylesheet" href="{% static 'css/mobile-nav.css' %}?v=20260917.1">
-  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/mobile-nav.css' %}?v=20260917.5">
 </head>
 <body>
   {% if request.resolver_match.namespace == 'core' and request.resolver_match.url_name == 'home' %}
@@ -68,31 +67,33 @@
     </div></div>
     <nav class="main-nav" aria-label="Main navigation"><div class="site-shell nav-inner">
       <a class="brand" href="{% url 'core:home' %}" aria-label="SDO Sulu home"><img class="brand-logo" src="{% static 'logosdo.jpeg' %}" alt="SDO Sulu official seal" width="58" height="58"><span><small>Schools Division Office</small><strong>SULU</strong></span></a>
-      <button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-menu"><span class="sr-only">Toggle menu</span><span></span><span></span><span></span></button>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-menu"><span class="sr-only">Open navigation menu</span><span></span><span></span><span></span></button>
       <div id="primary-menu" class="nav-links">
+        <div class="mobile-menu-brand" aria-hidden="true"><img src="{% static 'logosdo.jpeg' %}" alt="" width="54" height="54"><span><small>Schools Division Office</small><strong>SULU</strong></span></div>
         <a href="{% url 'core:home' %}">Home</a>
         <div class="nav-dropdown">
-          <a class="nav-dropdown-trigger" href="{% url 'issuances:list' %}" aria-haspopup="true">Issuances <span aria-hidden="true">▾</span></a>
-          <div class="nav-dropdown-menu" aria-label="Issuance categories">
-            <a href="{% url 'issuances:list' %}?category=DIVISION_MEMO">Division Memo</a>
-            <a href="{% url 'issuances:list' %}?category=OFFICE_MEMO">Office Memo</a>
-            <a href="{% url 'issuances:list' %}?category=UNNUMBERED_MEMO">Unnumbered Memo</a>
-            <a href="{% url 'issuances:list' %}?category=DIVISION_ADVISORY">Division Advisory</a>
-            <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-orders/" target="_blank" rel="noopener noreferrer">DepEd Order <span aria-hidden="true">↗</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
-            <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-memoranda/" target="_blank" rel="noopener noreferrer">DepEd Memoranda <span aria-hidden="true">↗</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
-            <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-advisories/" target="_blank" rel="noopener noreferrer">DepEd Advisories <span aria-hidden="true">↗</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
+          <div class="nav-trigger-row"><a class="nav-dropdown-trigger" href="{% url 'issuances:list' %}" aria-haspopup="true">Issuances <span aria-hidden="true">▾</span></a><button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="issuances-submenu"><span class="sr-only">Show Issuances submenu</span><i aria-hidden="true"></i></button></div>
+          <div id="issuances-submenu" class="nav-dropdown-menu" aria-label="Issuance categories">
+            <a href="{% url 'issuances:list' %}?category=DIVISION_MEMO"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Division Memo</span></a>
+            <a href="{% url 'issuances:list' %}?category=OFFICE_MEMO"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Office Memo</span></a>
+            <a href="{% url 'issuances:list' %}?category=UNNUMBERED_MEMO"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Unnumbered Memo</span></a>
+            <a href="{% url 'issuances:list' %}?category=DIVISION_ADVISORY"><svg aria-hidden="true"><use href="#icon-message"/></svg><span>Division Advisory</span></a>
+            <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-orders/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-external"/></svg><span>DepEd Order</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
+            <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-memoranda/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-external"/></svg><span>DepEd Memoranda</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
+            <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-advisories/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-external"/></svg><span>DepEd Advisories</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
           </div>
         </div>
         <div class="nav-dropdown">
-          <a class="nav-dropdown-trigger" href="{% url 'pages:detail' 'about' %}" aria-haspopup="true">About <span aria-hidden="true">▾</span></a>
-          <div class="nav-dropdown-menu" aria-label="About SDO Sulu">
-            <a href="{% url 'pages:mission_vision' %}">Mission and Vision</a>
-            <a href="{% url 'pages:detail' 'citizens-charter' %}">Citizens Charter</a>
-            <a href="{% url 'pages:detail' 'contact' %}">Contact Us</a>
+          <div class="nav-trigger-row"><a class="nav-dropdown-trigger" href="{% url 'pages:detail' 'about' %}" aria-haspopup="true">About <span aria-hidden="true">▾</span></a><button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="about-submenu"><span class="sr-only">Show About submenu</span><i aria-hidden="true"></i></button></div>
+          <div id="about-submenu" class="nav-dropdown-menu" aria-label="About SDO Sulu">
+            <a href="{% url 'pages:mission_vision' %}"><svg aria-hidden="true"><use href="#icon-target"/></svg><span>Mission and Vision</span></a>
+            <a href="{% url 'pages:detail' 'citizens-charter' %}"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Citizens Charter</span></a>
+            <a href="{% url 'pages:detail' 'contact' %}"><svg aria-hidden="true"><use href="#icon-mail"/></svg><span>Contact Us</span></a>
           </div>
         </div>
         <a href="{% url 'content:news' %}">News</a><a href="{% url 'schools:directory' %}">Schools</a><a href="{% url 'events:list' %}">Events</a><a class="nav-search" href="{% url 'core:search' %}" aria-label="Search portal"><svg aria-hidden="true"><use href="#icon-search"/></svg></a>
       </div>
+      <button class="mobile-nav-backdrop" type="button" tabindex="-1" aria-label="Close navigation menu"></button>
     </div></nav>
   </header>
   <main id="main" class="{% block main_class %}page-main site-shell{% endblock %}">{% if messages %}<div class="site-shell message-stack">{% for message in messages %}<p class="message">{{ message }}</p>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</main>
@@ -112,13 +113,13 @@
       <div><strong>Government Links</strong><a href="https://www.deped.gov.ph/" target="_blank" rel="noopener">Department of Education</a><a href="https://www.gov.ph/" target="_blank" rel="noopener">Official Gazette</a></div>
       <div><strong>Public Information</strong><a href="{% url 'schools:directory' %}">School Directory</a><a href="{% url 'issuances:list' %}">Official Issuances</a><a href="{% url 'pages:detail' 'contact' %}">Contact</a><a href="{% url 'pages:detail' 'privacy-policy' %}">Privacy Policy</a><a href="{% url 'pages:detail' 'terms-of-use' %}">Terms of Use</a></div>
     </div>
-    <div class="footer-bottom"><span>© {% now "Y" %} SDO Sulu. All rights reserved.</span><span>Privacy · Accessibility · Terms of Use</span></div>
+    <div class="footer-bottom"><span>© {% now "Y" %} SDO Sulu. All rights reserved.</span><span>Developed by <strong>LightyeByte</strong></span><span>Privacy · Accessibility · Terms of Use</span></div>
   </footer>
   <svg class="svg-sprite" aria-hidden="true">
-    <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-13A7 7 0 1 0 5 8c0 6.8 7 13 7 13Zm0-10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></symbol><symbol id="icon-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm2 2v1l7 5 7-5V7H5Zm14 10v-6l-7 5-7-5v6h14Z"/></symbol><symbol id="icon-phone" viewBox="0 0 24 24"><path d="M6.6 2 10 7 7.8 9.2c1.5 3 3.9 5.4 6.9 6.9l2.2-2.2 5 3.4-.8 4c-.2 1-1.1 1.7-2.1 1.7C9.1 23 1 14.9 1 5c0-1 .7-1.9 1.7-2.1L6.6 2Z"/></symbol><symbol id="icon-message" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-7.7 13.7L3 21l5.5-1.3A9 9 0 1 0 12 2Zm0 2a7 7 0 1 1-2.9 13.4l-.3-.1-3 .7.7-2.9-.2-.3A7 7 0 0 1 12 4Zm-3 3.4c-.4 0-.8.4-.9.9-.2 1.1.5 2.6 1.8 3.9 1.3 1.3 3.2 2.4 4.6 2 .6-.2 1.1-.8 1.1-1.3 0-.3-1.6-1-1.9-1-.2 0-.5.6-.7.8-.1.1-.3.1-.5 0-1-.4-2-1.3-2.4-2.3-.1-.2-.1-.3 0-.5.2-.2.6-.5.6-.7 0-.3-.8-1.8-1.1-1.8H9Z"/></symbol><symbol id="icon-search" viewBox="0 0 24 24"><path d="m20 18.6-4.5-4.5a7 7 0 1 0-1.4 1.4l4.5 4.5 1.4-1.4ZM5 10a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"/></symbol><symbol id="icon-document" viewBox="0 0 24 24"><path d="M5 2h10l4 4v16H5V2Zm9 2v3h3l-3-3ZM8 11h8V9H8v2Zm0 4h8v-2H8v2Zm0 4h6v-2H8v2Z"/></symbol><symbol id="icon-calendar" viewBox="0 0 24 24"><path d="M7 2h2v3h6V2h2v3h4v17H3V5h4V2ZM5 10v10h14V10H5Zm2 3h3v3H7v-3Z"/></symbol><symbol id="icon-arrow" viewBox="0 0 24 24"><path d="m13 5 7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5Z"/></symbol><symbol id="icon-school" viewBox="0 0 24 24"><path d="m12 2 11 5-11 5L1 7l11-5ZM4 11l8 3.6 8-3.6v7H4v-7Zm-2 9h20v2H2v-2Z"/></symbol><symbol id="icon-headset" viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0v6h-5v-7h3a6 6 0 0 0-12 0h3v7H6c0 1.1.9 2 2 2h4v2H8a4 4 0 0 1-4-4v-6Z"/></symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-13A7 7 0 1 0 5 8c0 6.8 7 13 7 13Zm0-10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></symbol><symbol id="icon-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm2 2v1l7 5 7-5V7H5Zm14 10v-6l-7 5-7-5v6h14Z"/></symbol><symbol id="icon-phone" viewBox="0 0 24 24"><path d="M6.6 2 10 7 7.8 9.2c1.5 3 3.9 5.4 6.9 6.9l2.2-2.2 5 3.4-.8 4c-.2 1-1.1 1.7-2.1 1.7C9.1 23 1 14.9 1 5c0-1 .7-1.9 1.7-2.1L6.6 2Z"/></symbol><symbol id="icon-message" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-7.7 13.7L3 21l5.5-1.3A9 9 0 1 0 12 2Zm0 2a7 7 0 1 1-2.9 13.4l-.3-.1-3 .7.7-2.9-.2-.3A7 7 0 0 1 12 4Zm-3 3.4c-.4 0-.8.4-.9.9-.2 1.1.5 2.6 1.8 3.9 1.3 1.3 3.2 2.4 4.6 2 .6-.2 1.1-.8 1.1-1.3 0-.3-1.6-1-1.9-1-.2 0-.5.6-.7.8-.1.1-.3.1-.5 0-1-.4-2-1.3-2.4-2.3-.1-.2-.1-.3 0-.5.2-.2.6-.5.6-.7 0-.3-.8-1.8-1.1-1.8H9Z"/></symbol><symbol id="icon-search" viewBox="0 0 24 24"><path d="m20 18.6-4.5-4.5a7 7 0 1 0-1.4 1.4l4.5 4.5 1.4-1.4ZM5 10a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"/></symbol><symbol id="icon-document" viewBox="0 0 24 24"><path d="M5 2h10l4 4v16H5V2Zm9 2v3h3l-3-3ZM8 11h8V9H8v2Zm0 4h8v-2H8v2Zm0 4h6v-2H8v2Z"/></symbol><symbol id="icon-calendar" viewBox="0 0 24 24"><path d="M7 2h2v3h6V2h2v3h4v17H3V5h4V2ZM5 10v10h14V10H5Zm2 3h3v3H7v-3Z"/></symbol><symbol id="icon-arrow" viewBox="0 0 24 24"><path d="m13 5 7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5Z"/></symbol><symbol id="icon-school" viewBox="0 0 24 24"><path d="m12 2 11 5-11 5L1 7l11-5ZM4 11l8 3.6 8-3.6v7H4v-7Zm-2 9h20v2H2v-2Z"/></symbol><symbol id="icon-headset" viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0v6h-5v-7h3a6 6 0 0 0-12 0h3v7H6c0 1.1.9 2 2 2h4v2H8a4 4 0 0 1-4-4v-6Z"/></symbol><symbol id="icon-target" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2Zm0 5a5 5 0 1 0 5 5h-2a3 3 0 1 1-3-3V7Zm8-5v3h-3v2h-2v2h-3v3h3v-2h2V8h3V5h2V2h-2Z"/></symbol><symbol id="icon-external" viewBox="0 0 24 24"><path d="M14 3h7v7h-2V6.4l-8.3 8.3-1.4-1.4L17.6 5H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"/></symbol>
   </svg>
   {% block extra_js %}{% endblock %}
   <script defer src="{% static 'js/portal-animations.js' %}?v=20260916.2"></script>
-  <script defer src="{% static 'js/mobile-nav.js' %}?v=20260917.1"></script>
+  <script defer src="{% static 'js/mobile-nav.js' %}?v=20260917.3"></script>
   {% if request.resolver_match.namespace == 'core' and request.resolver_match.url_name == 'home' %}<script defer src="{% static 'js/site-loader.js' %}?v=20260916.1"></script>{% endif %}
 </body></html>

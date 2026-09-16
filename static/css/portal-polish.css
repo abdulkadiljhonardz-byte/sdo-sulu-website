@@ -379,9 +379,16 @@ textarea:focus-visible {
 .footer-bottom {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 20px;
   width: min(1180px, calc(100% - 40px));
   margin-inline: auto;
   text-align: left;
+}
+
+.footer-bottom strong {
+  color: #ffc391;
+  font-weight: 700;
 }
 
 @media (prefers-reduced-motion: reduce) {
