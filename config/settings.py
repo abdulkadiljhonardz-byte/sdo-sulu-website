@@ -1,14 +1,27 @@
 import os
 from pathlib import Path
 from urllib.parse import urlparse
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 BASE_DIR=Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR/".env")
-SECRET_KEY=os.environ.get("DJANGO_SECRET_KEY","unsafe-development-key-change-me")
+IS_RAILWAY=bool(os.environ.get("RAILWAY_ENVIRONMENT"))
 # Development is the safe default for a fresh local checkout. Production
 # deployments must explicitly set DJANGO_DEBUG=False in their environment.
-DEBUG=os.environ.get("DJANGO_DEBUG","True").lower()=="true"
-ALLOWED_HOSTS=[x.strip() for x in os.environ.get("DJANGO_ALLOWED_HOSTS","localhost,127.0.0.1").split(",")]
+DEBUG=os.environ.get("DJANGO_DEBUG","False" if IS_RAILWAY else "True").lower()=="true"
+SECRET_KEY=os.environ.get("DJANGO_SECRET_KEY","")
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY="unsafe-development-key-change-me"
+    else:
+        raise ImproperlyConfigured("DJANGO_SECRET_KEY must be configured in production.")
+ALLOWED_HOSTS=[x.strip() for x in os.environ.get("DJANGO_ALLOWED_HOSTS","localhost,127.0.0.1").split(",") if x.strip()]
+RAILWAY_PUBLIC_DOMAIN=os.environ.get("RAILWAY_PUBLIC_DOMAIN","").strip()
+if RAILWAY_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+# Railway uses this hostname for deployment health checks.
+if not DEBUG:
+    ALLOWED_HOSTS.append("healthcheck.railway.app")
 # The deployed portal is informational by default. Historical transactional
 # records remain available to authorized administrators, but their public
 # submission endpoints are not mounted unless explicitly enabled.
@@ -50,4 +63,6 @@ FACEBOOK_PAGE_ACCESS_TOKEN=os.environ.get("FACEBOOK_PAGE_ACCESS_TOKEN","")
 FACEBOOK_GRAPH_API_VERSION=os.environ.get("FACEBOOK_GRAPH_API_VERSION","v23.0")
 FACEBOOK_SYNC_AUTHOR=os.environ.get("FACEBOOK_SYNC_AUTHOR","")
 CSRF_TRUSTED_ORIGINS=[item.strip() for item in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS","").split(",") if item.strip()]
+if RAILWAY_PUBLIC_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RAILWAY_PUBLIC_DOMAIN}")
 LOGGING={"version":1,"disable_existing_loggers":False,"formatters":{"standard":{"format":"{asctime} {levelname} {name} {message}","style":"{"}},"handlers":{"console":{"class":"logging.StreamHandler","formatter":"standard"},"mail_admins":{"class":"django.utils.log.AdminEmailHandler","level":"ERROR","include_html":False}},"root":{"handlers":["console"],"level":os.environ.get("LOG_LEVEL","INFO")},"loggers":{"django.request":{"handlers":["console","mail_admins"],"level":"ERROR","propagate":False},"django.security":{"handlers":["console","mail_admins"],"level":"WARNING","propagate":False}}}

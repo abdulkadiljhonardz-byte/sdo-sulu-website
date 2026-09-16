@@ -20,9 +20,11 @@ migrations, collects static assets, and starts Gunicorn on the platform-provided
 `PORT`.
 
 Provision PostgreSQL and configure at least `DATABASE_URL`,
-`DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `DJANGO_ALLOWED_HOSTS`, and
-`DJANGO_CSRF_TRUSTED_ORIGINS` in the deployment environment. Set the service
-start command to `./start.sh` if it is not detected automatically. Uploaded
+`DJANGO_SECRET_KEY` and `DJANGO_DEBUG=False` in the deployment environment.
+Railway's generated `RAILWAY_PUBLIC_DOMAIN` is accepted automatically; add
+`DJANGO_ALLOWED_HOSTS` and `DJANGO_CSRF_TRUSTED_ORIGINS` when using a custom
+domain. The committed `railway.json` selects Railpack, starts the service with
+`sh start.sh`, checks `/health/`, and restarts failed processes. Uploaded
 media requires a persistent volume or an object-storage backend because the
 default PaaS filesystem is ephemeral.
 
