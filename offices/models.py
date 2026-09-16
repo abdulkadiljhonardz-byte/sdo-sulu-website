@@ -17,5 +17,9 @@ class Office(TimeStampedModel):
 class District(TimeStampedModel):
     name = models.CharField(max_length=160, unique=True)
     municipality = models.CharField(max_length=160)
+    public_school_target = models.PositiveIntegerField(
+        default=0,
+        help_text="Official target number of public schools for this district.",
+    )
     active = models.BooleanField(default=True)
     def __str__(self): return self.name

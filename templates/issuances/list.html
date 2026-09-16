@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block title %}{{ category_label }} — SDO Sulu{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'css/issuances.css' %}">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/issuances.css' %}"><link rel="stylesheet" href="{% static 'css/issuance-covers.css' %}?v=20260917.2">{% endblock %}
 {% block content %}
 <header class="repository-header">
   <p class="repository-kicker">Official Documents</p>
@@ -23,7 +23,7 @@
 <div class="repository-table-wrap">
   <table class="repository-table">
     <thead><tr><th>Reference number</th><th>Title</th><th>Category</th><th>Date issued</th><th><span class="sr-only">Download</span></th></tr></thead>
-    <tbody>{% for item in items %}<tr><td><strong>{{ item.reference_number }}</strong></td><td><a class="document-title" href="{% url 'issuances:detail' item.pk %}">{{ item.title }}</a>{% if item.office %}<small>{{ item.office }}</small>{% endif %}</td><td><span class="category-badge">{{ item.get_category_display }}</span></td><td>{{ item.date_issued|date:"M d, Y" }}</td><td><a class="download-link" href="{% url 'issuances:download' item.pk %}" aria-label="Download {{ item.title }}"><svg><use href="#icon-document"/></svg> PDF</a></td></tr>{% empty %}<tr><td class="repository-empty" colspan="5">No published issuances found{% if q %} for “{{ q }}”{% endif %}.</td></tr>{% endfor %}</tbody>
+    <tbody>{% for item in items %}<tr><td><strong>{{ item.reference_number }}</strong></td><td><div class="issuance-title-cell">{% if item.cover_image %}<a class="issuance-thumbnail" href="{% url 'issuances:detail' item.pk %}"><img src="{{ item.cover_image.url }}" alt="Cover of {{ item.reference_number }}" loading="lazy"></a>{% else %}<span class="issuance-thumbnail issuance-thumbnail-empty" aria-hidden="true">MEMO</span>{% endif %}<span><a class="document-title" href="{% url 'issuances:detail' item.pk %}">{{ item.title }}</a>{% if item.office %}<small>{{ item.office }}</small>{% endif %}</span></div></td><td><span class="category-badge">{{ item.get_category_display }}</span></td><td>{% if item.date_issued %}{{ item.date_issued|date:"M d, Y" }}{% else %}{{ item.year }}{% endif %}</td><td>{% if item.pdf %}<a class="download-link" href="{% url 'issuances:download' item.pk %}" aria-label="Download {{ item.title }}"><svg><use href="#icon-document"/></svg> PDF</a>{% elif item.source_url %}<a class="download-link" href="{{ item.source_url }}" target="_blank" rel="noopener noreferrer" aria-label="Open the original Facebook post for {{ item.title }}"><svg><use href="#icon-arrow"/></svg> Facebook</a>{% else %}<a class="download-link" href="{% url 'issuances:detail' item.pk %}">Details</a>{% endif %}</td></tr>{% empty %}<tr><td class="repository-empty" colspan="5">No published issuances found{% if q %} for “{{ q }}”{% endif %}.</td></tr>{% endfor %}</tbody>
   </table>
 </div>
 {% endblock %}

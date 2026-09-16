@@ -1,0 +1,88 @@
+.issuance-title-cell {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 280px;
+}
+
+.issuance-title-cell > span:last-child {
+  min-width: 0;
+}
+
+.issuance-thumbnail {
+  display: grid;
+  width: 70px;
+  height: 94px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #d7e5de;
+  border-radius: 7px;
+  background: #edf5f1;
+}
+
+.issuance-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform .2s ease;
+}
+
+.publication-detail.issuance-detail > figure {
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  overflow: visible;
+  background: linear-gradient(145deg, #eef4f1, #dbe8e2);
+}
+
+.publication-detail.issuance-detail > figure > a {
+  display: grid;
+  width: 100%;
+  place-items: center;
+}
+
+.publication-detail.issuance-detail > figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+
+.publication-detail.issuance-detail > figure figcaption {
+  width: 100%;
+  margin-top: 12px;
+  color: #687a72;
+  font-size: .7rem;
+  text-align: center;
+}
+
+@media (max-width: 620px) {
+  .issuance-title-cell {
+    grid-template-columns: 58px minmax(0, 1fr);
+    min-width: 240px;
+  }
+
+  .issuance-thumbnail {
+    width: 58px;
+    height: 78px;
+  }
+
+  .publication-detail.issuance-detail > figure {
+    padding: 8px;
+  }
+}
+
+.issuance-thumbnail:hover img {
+  transform: scale(1.06);
+}
+
+.issuance-thumbnail-empty {
+  color: #087a4b;
+  font-size: .55rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+}

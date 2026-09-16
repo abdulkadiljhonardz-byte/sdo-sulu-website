@@ -11,6 +11,7 @@ DEFAULTS = {
     "EMAIL": "sdskiram.irilis@deped.gov.ph",
     "PHONE": "0965 754 5663",
     "WHATSAPP": "+63 966 175 6976",
+    "MAP_URL": "https://www.google.com/maps/place/Department+of+Education/@6.0516351,121.0015126,20z/data=!4m6!3m5!1s0x3244fdcd27283039:0x17e97c0b5fafcf44!8m2!3d6.0516996!4d121.0017765!16s%2Fg%2F1txx_v9q?entry=ttu&g_ep=EgoyMDI2MDkxMy4wIKXMDSoASAFQAw%3D%3D",
     "OFFICE_HOURS": "Monday–Friday, 8:00 AM–5:00 PM",
     "HOMEPAGE_BANNER": "",
     "FOOTER_TEXT": "Official Digital Information Portal",

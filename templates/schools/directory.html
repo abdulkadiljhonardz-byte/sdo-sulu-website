@@ -1,1 +1,60 @@
-{% extends 'base/base.html' %}{% block content %}<h1 class="text-2xl font-bold">School Directory</h1><form class="my-4"><input class="border p-2" name="q" value="{{ request.GET.q }}" placeholder="Search school or ID"><button class="bg-blue-900 text-white p-2">Search</button></form><div class="grid gap-3">{% for school in schools %}<a class="bg-white p-4 rounded shadow" href="{{ school.pk }}/"><strong>{{ school.name }}</strong><br><small>{{ school.district }} · {{ school.municipality }}</small></a>{% empty %}<p>No schools found.</p>{% endfor %}</div>{% endblock %}
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}School Directory — SDO Sulu{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/school-directory.css' %}?v=20260917.2">{% endblock %}
+{% block content %}
+<header class="school-directory-heading">
+  <div><p>Schools Division Office of Sulu</p><h1>School Directory</h1><span>Browse active schools and view the official public-school target for every district.</span></div>
+  <a href="#school-results">Browse schools <svg aria-hidden="true"><use href="#icon-arrow"/></svg></a>
+</header>
+
+<section class="school-summary" aria-label="District and school summary">
+  <article><span>Districts</span><strong>{{ district_count }}</strong><small>Active district offices</small></article>
+  <article class="featured"><span>Public-school target</span><strong>{{ total_target }}</strong><small>Official division-wide target</small></article>
+  <article><span>Schools listed</span><strong>{{ listed_public_schools }}</strong><small>Active public-school records</small></article>
+</section>
+
+<section class="district-targets">
+  <header><div><p>District profile</p><h2>Public-school targets</h2></div><span>The target total is calculated from the database and can be updated by an authorized administrator.</span></header>
+  <div class="district-target-grid">
+    {% for district in districts %}
+    <a href="?district={{ district.pk }}#school-results" class="district-target-card{% if selected_district == district.pk|stringformat:'s' %} active{% endif %}">
+      <span><strong>{{ district.name }}</strong><small>{{ district.municipality }}</small></span>
+      <b>{{ district.public_school_target }}</b>
+      <em>target</em>
+      <i style="--district-progress:{% widthratio district.listed_public_schools district.public_school_target 100 %}%" aria-hidden="true"></i>
+      <small>{{ district.listed_public_schools }} public school{{ district.listed_public_schools|pluralize }} currently listed</small>
+    </a>
+    {% endfor %}
+  </div>
+  <footer><span>Division total</span><strong>{{ total_target }}</strong><small>public-school target</small></footer>
+</section>
+
+<section class="school-results" id="school-results">
+  <header><div><p>Directory records</p><h2>Find a school</h2></div></header>
+  <form method="get" class="school-search-form" role="search">
+    <label><span>School name, ID, municipality, or barangay</span><input type="search" name="q" value="{{ query }}" placeholder="Search the school directory"></label>
+    <label><span>District</span><select name="district"><option value="">All districts</option>{% for district in districts %}<option value="{{ district.pk }}"{% if selected_district == district.pk|stringformat:'s' %} selected{% endif %}>{{ district.name }}</option>{% endfor %}</select></label>
+    <button type="submit"><svg aria-hidden="true"><use href="#icon-search"/></svg> Search</button>
+    {% if query or selected_district %}<a href="{% url 'schools:directory' %}#school-results">Clear</a>{% endif %}
+  </form>
+
+  <div class="school-result-list">
+    {% for school in schools %}
+    <a href="{% url 'schools:detail' school.pk %}">
+      <span class="school-result-icon"><svg aria-hidden="true"><use href="#icon-school"/></svg></span>
+      <span><small>{{ school.school_id }} · {{ school.get_classification_display }}</small><strong>{{ school.name }}</strong><em>{{ school.district.name }}{% if school.municipality %} · {{ school.municipality }}{% endif %}</em></span>
+      <b>View profile <svg aria-hidden="true"><use href="#icon-arrow"/></svg></b>
+    </a>
+    {% empty %}
+    <div class="school-empty"><svg aria-hidden="true"><use href="#icon-school"/></svg><strong>No schools found</strong><p>Try a different search or select another district.</p></div>
+    {% endfor %}
+  </div>
+
+  {% if page.paginator.num_pages > 1 %}<nav class="school-pagination" aria-label="School directory pages">
+    {% if page.has_previous %}<a href="?q={{ query|urlencode }}&district={{ selected_district|urlencode }}&page={{ page.previous_page_number }}#school-results">Previous</a>{% endif %}
+    <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+    {% if page.has_next %}<a href="?q={{ query|urlencode }}&district={{ selected_district|urlencode }}&page={{ page.next_page_number }}#school-results">Next</a>{% endif %}
+  </nav>{% endif %}
+</section>
+{% endblock %}

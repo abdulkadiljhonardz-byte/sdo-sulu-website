@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+{% block title %}Mission and Vision — SDO Sulu{% endblock %}
+{% block content %}
+<article class="public-information-page mission-vision-page">
+  <header>
+    <p>Schools Division Office of Sulu</p>
+    <h1>Mission and Vision</h1>
+    <span>Our commitment to learners and the future we work to build.</span>
+  </header>
+  <div class="mission-vision-grid">
+    <section>
+      <p>Our commitment</p>
+      <h2>{{ mission.title }}</h2>
+      <div class="public-page-body">{{ mission.body|linebreaks }}</div>
+    </section>
+    <section>
+      <p>Our direction</p>
+      <h2>{{ vision.title }}</h2>
+      <div class="public-page-body">{{ vision.body|linebreaks }}</div>
+    </section>
+  </div>
+</article>
+{% endblock %}

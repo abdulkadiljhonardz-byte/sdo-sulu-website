@@ -19,7 +19,7 @@ from content.models import Download, News, PublicPage, SiteSetting
 from content.facebook_import import FacebookImportError, import_facebook_post
 from content.facebook_page_sync import FacebookPageSyncError, sync_facebook_news
 from events.models import Event
-from feedback.models import Complaint, Feedback
+from feedback.models import Complaint, ContactInquiry, Feedback
 from issuances.models import Issuance, IssuanceVersion
 from notifications.models import Notification
 from notifications.emailing import notify_administrators, send_portal_email
@@ -34,6 +34,7 @@ from .models import AnalyticsEvent
 
 from .management_forms import (
     ComplaintManagementForm,
+    ContactInquiryManagementForm,
     DownloadManagementForm,
     EventManagementForm,
     FacebookImportForm,
@@ -199,6 +200,7 @@ def portal_settings(request):
         "email": "EMAIL",
         "phone": "PHONE",
         "whatsapp": "WHATSAPP",
+        "map_url": "MAP_URL",
         "office_hours": "OFFICE_HOURS",
         "homepage_banner": "HOMEPAGE_BANNER",
         "footer_text": "FOOTER_TEXT",
@@ -211,6 +213,10 @@ def portal_settings(request):
         "email": stored.get("EMAIL", "sdskiram.irilis@deped.gov.ph"),
         "phone": stored.get("PHONE", "0965 754 5663"),
         "whatsapp": stored.get("WHATSAPP", "+63 966 175 6976"),
+        "map_url": stored.get(
+            "MAP_URL",
+            "https://www.google.com/maps/place/Department+of+Education/@6.0516351,121.0015126,20z/data=!4m6!3m5!1s0x3244fdcd27283039:0x17e97c0b5fafcf44!8m2!3d6.0516996!4d121.0017765!16s%2Fg%2F1txx_v9q?entry=ttu&g_ep=EgoyMDI2MDkxMy4wIKXMDSoASAFQAw%3D%3D",
+        ),
         "office_hours": stored.get("OFFICE_HOURS", "Monday–Friday, 8:00 AM–5:00 PM"),
         "homepage_banner": stored.get("HOMEPAGE_BANNER", ""),
         "footer_text": stored.get("FOOTER_TEXT", "Official Digital Information Portal"),
@@ -231,9 +237,18 @@ def portal_settings(request):
 
 def feedback_management(request):
     _require_system_admin(request.user)
-    tab = request.GET.get("tab", "complaints")
+    tab = request.GET.get("tab", "inquiries")
     query = request.GET.get("q", "").strip()
-    if tab == "feedback":
+    if tab == "inquiries":
+        items = ContactInquiry.objects.order_by("-created_at")
+        if query:
+            items = items.filter(
+                Q(name__icontains=query)
+                | Q(email__icontains=query)
+                | Q(phone__icontains=query)
+                | Q(message__icontains=query)
+            )
+    elif tab == "feedback":
         items = Feedback.objects.order_by("-created_at")
         if query:
             items = items.filter(Q(message__icontains=query) | Q(email__icontains=query))
@@ -244,6 +259,34 @@ def feedback_management(request):
             items = items.filter(Q(reference_number__icontains=query) | Q(subject__icontains=query) | Q(details__icontains=query))
     page = Paginator(items, 20).get_page(request.GET.get("page"))
     return render(request, "management/feedback.html", {"page": page, "tab": tab, "query": query})
+
+
+def contact_inquiry_update(request, pk):
+    _require_system_admin(request.user)
+    inquiry = get_object_or_404(ContactInquiry, pk=pk)
+    previous = {"status": inquiry.status}
+    form = ContactInquiryManagementForm(request.POST or None, instance=inquiry)
+    if request.method == "POST" and form.is_valid():
+        inquiry = form.save()
+        record_action(
+            request,
+            "Contact inquiry status updated",
+            inquiry,
+            previous=previous,
+            current={"status": inquiry.status},
+        )
+        messages.success(request, "The contact inquiry status was updated.")
+        send_portal_email(
+            "SDO Sulu inquiry status update",
+            f"The status of your inquiry is now {inquiry.get_status_display()}.",
+            [inquiry.email],
+        )
+        return redirect("core:feedback_management")
+    return render(
+        request,
+        "management/contact_inquiry_form.html",
+        {"form": form, "inquiry": inquiry},
+    )
 
 
 def complaint_update(request, pk):

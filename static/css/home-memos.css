@@ -78,6 +78,7 @@
 
 .memo-card-banner.has-cover {
   display: block;
+  height: 178px;
   padding: 0;
   background: #dfe9e4;
 }
@@ -90,6 +91,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform .35s ease;
 }
 
@@ -216,6 +218,7 @@
   }
 
   .memo-card-banner.has-cover {
+    height: 145px;
     padding: 0;
   }
 

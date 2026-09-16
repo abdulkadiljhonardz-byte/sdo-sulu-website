@@ -1,5 +1,41 @@
 from django import forms
-from .models import Complaint,Feedback
+from .models import Complaint, ContactInquiry, Feedback
+
+
+class ContactInquiryForm(forms.ModelForm):
+    website = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"tabindex": "-1", "autocomplete": "off"}),
+    )
+
+    class Meta:
+        model = ContactInquiry
+        fields = ("name", "email", "phone", "address", "message")
+        widgets = {
+            "name": forms.TextInput(attrs={"placeholder": "Your name", "autocomplete": "name"}),
+            "email": forms.EmailInput(attrs={"placeholder": "Your email address", "autocomplete": "email"}),
+            "phone": forms.TextInput(attrs={"placeholder": "Phone number", "autocomplete": "tel", "inputmode": "tel"}),
+            "address": forms.TextInput(attrs={"placeholder": "Your address (optional)", "autocomplete": "street-address"}),
+            "message": forms.Textarea(attrs={"placeholder": "How can we help you?", "rows": 7}),
+        }
+
+    def clean_website(self):
+        if self.cleaned_data.get("website"):
+            raise forms.ValidationError("Invalid submission.")
+        return ""
+
+    def clean_phone(self):
+        phone = self.cleaned_data["phone"].strip()
+        digits = "".join(character for character in phone if character.isdigit())
+        if len(digits) < 7 or len(digits) > 15:
+            raise forms.ValidationError("Enter a valid contact number.")
+        return phone
+
+    def clean_message(self):
+        message = self.cleaned_data["message"].strip()
+        if len(message) < 10:
+            raise forms.ValidationError("Please provide at least 10 characters.")
+        return message
 
 class FeedbackForm(forms.ModelForm):
     class Meta:

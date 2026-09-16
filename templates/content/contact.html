@@ -1,0 +1,81 @@
+{% extends 'base/base.html' %}
+{% block title %}Contact Us — SDO Sulu{% endblock %}
+{% block content %}
+<article class="contact-page">
+  <header class="contact-heading">
+    <p>Get in touch</p>
+    <h1>Contact Us</h1>
+    <span>Send an inquiry or use the official contact channels of the Schools Division Office of Sulu.</span>
+  </header>
+
+  <div class="contact-layout">
+    <aside class="contact-details" aria-label="Official contact details">
+      <a href="tel:{{ PORTAL_SETTINGS.PHONE_URI }}">
+        <span class="contact-icon"><svg aria-hidden="true"><use href="#icon-phone"/></svg></span>
+        <span><small>Phone number</small><strong>{{ PORTAL_SETTINGS.PHONE }}</strong><em>Tap to call the division office</em></span>
+      </a>
+      <a href="{{ PORTAL_SETTINGS.MAP_URL }}" target="_blank" rel="noopener noreferrer">
+        <span class="contact-icon orange"><svg aria-hidden="true"><use href="#icon-pin"/></svg></span>
+        <span><small>Office location</small><strong>{{ PORTAL_SETTINGS.ADDRESS }}</strong><em>Open location in Google Maps</em></span>
+      </a>
+      <a href="mailto:{{ PORTAL_SETTINGS.EMAIL }}">
+        <span class="contact-icon"><svg aria-hidden="true"><use href="#icon-mail"/></svg></span>
+        <span><small>Email address</small><strong>{{ PORTAL_SETTINGS.EMAIL }}</strong><em>Send an official email</em></span>
+      </a>
+      <a href="{{ PORTAL_SETTINGS.WHATSAPP_URI }}" target="_blank" rel="noopener noreferrer">
+        <span class="contact-icon orange"><svg aria-hidden="true"><use href="#icon-message"/></svg></span>
+        <span><small>WhatsApp</small><strong>{{ PORTAL_SETTINGS.WHATSAPP }}</strong><em>Start a WhatsApp conversation</em></span>
+      </a>
+      <div class="contact-hours">
+        <small>Office hours</small>
+        <strong>{{ PORTAL_SETTINGS.OFFICE_HOURS }}</strong>
+        <p>Messages received outside office hours will be reviewed on the next working day.</p>
+      </div>
+    </aside>
+
+    <section class="contact-form-panel">
+      <div class="contact-form-title">
+        <p>Public assistance</p>
+        <h2>Send us a message</h2>
+        <span>Fields marked with an asterisk are required.</span>
+      </div>
+      <form method="post" class="contact-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="contact-form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+        <div class="contact-field">
+          <label for="{{ form.name.id_for_label }}">Your name <b aria-hidden="true">*</b></label>
+          {{ form.name }}
+          {% if form.name.errors %}<small role="alert">{{ form.name.errors|striptags }}</small>{% endif %}
+        </div>
+        <div class="contact-form-row">
+          <div class="contact-field">
+            <label for="{{ form.email.id_for_label }}">Email address <b aria-hidden="true">*</b></label>
+            {{ form.email }}
+            {% if form.email.errors %}<small role="alert">{{ form.email.errors|striptags }}</small>{% endif %}
+          </div>
+          <div class="contact-field">
+            <label for="{{ form.phone.id_for_label }}">Phone number <b aria-hidden="true">*</b></label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<small role="alert">{{ form.phone.errors|striptags }}</small>{% endif %}
+          </div>
+        </div>
+        <div class="contact-field">
+          <label for="{{ form.address.id_for_label }}">Your address <span>Optional</span></label>
+          {{ form.address }}
+          {% if form.address.errors %}<small role="alert">{{ form.address.errors|striptags }}</small>{% endif %}
+        </div>
+        <div class="contact-field">
+          <label for="{{ form.message.id_for_label }}">Your message <b aria-hidden="true">*</b></label>
+          {{ form.message }}
+          {% if form.message.errors %}<small role="alert">{{ form.message.errors|striptags }}</small>{% endif %}
+        </div>
+        <div class="contact-honeypot" aria-hidden="true">{{ form.website }}</div>
+        <div class="contact-submit-row">
+          <p>Your information is used only to respond to this inquiry and is not displayed publicly.</p>
+          <button type="submit">Send message <svg aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+        </div>
+      </form>
+    </section>
+  </div>
+</article>
+{% endblock %}

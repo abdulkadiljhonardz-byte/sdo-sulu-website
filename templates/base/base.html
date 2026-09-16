@@ -5,7 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#07513b">
-  <link rel="icon" href="{% static 'favicon.svg' %}?v=20260916.2" type="image/svg+xml">
+  <link rel="icon" href="{% static 'logosdo.jpeg' %}?v=20260917.1" type="image/jpeg">
+  <link rel="apple-touch-icon" href="{% static 'logosdo.jpeg' %}?v=20260917.1">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'logosdo.jpeg' %}">
+  <meta property="og:image:alt" content="Official SDO Sulu seal">
   <title>{% block title %}SDO Sulu{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,15 +32,15 @@
   <link rel="stylesheet" href="{% static 'css/user-management.css' %}?v=20260916.1">
   <link rel="stylesheet" href="{% static 'css/content-management.css' %}?v=20260916.1">
   <link rel="stylesheet" href="{% static 'css/system-admin.css' %}?v=20260916.1">
-  <link rel="stylesheet" href="{% static 'css/public-pages.css' %}?v=20260917.2">
+  <link rel="stylesheet" href="{% static 'css/public-pages.css' %}?v=20260917.4">
   <link rel="stylesheet" href="{% static 'css/analytics.css' %}?v=20260916.1">
   <link rel="stylesheet" href="{% static 'css/data-workspace.css' %}?v=20260916.1">
   <link rel="stylesheet" href="{% static 'css/publication-safeguards.css' %}?v=20260916.1">
   <link rel="stylesheet" href="{% static 'css/search.css' %}?v=20260916.1">
   <link rel="stylesheet" href="{% static 'css/publications.css' %}?v=20260916.1">
-  <link rel="stylesheet" href="{% static 'css/home-memos.css' %}?v=20260916.1">
+  <link rel="stylesheet" href="{% static 'css/home-memos.css' %}?v=20260917.3">
   <link rel="stylesheet" href="{% static 'css/reference-hero.css' %}?v=20260916.6">
-  <link rel="stylesheet" href="{% static 'css/home-enhancements.css' %}?v=20260917.3">
+  <link rel="stylesheet" href="{% static 'css/home-enhancements.css' %}?v=20260917.5">
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
@@ -59,10 +62,6 @@
   <a href="#main" class="skip-link">Skip to content</a>
   <header x-data="{ open: false }">
     <div class="utility-bar"><div class="site-shell utility-inner">
-      <span><svg aria-hidden="true"><use href="#icon-pin"/></svg> {{ PORTAL_SETTINGS.ADDRESS }}</span>
-      <a href="mailto:{{ PORTAL_SETTINGS.EMAIL }}"><svg aria-hidden="true"><use href="#icon-mail"/></svg> {{ PORTAL_SETTINGS.EMAIL }}</a>
-      <a href="tel:{{ PORTAL_SETTINGS.PHONE_URI }}"><svg aria-hidden="true"><use href="#icon-phone"/></svg> {{ PORTAL_SETTINGS.PHONE }}</a>
-      <a class="utility-whatsapp" href="{{ PORTAL_SETTINGS.WHATSAPP_URI }}" target="_blank" rel="noopener noreferrer" aria-label="Message SDO Sulu on WhatsApp at {{ PORTAL_SETTINGS.WHATSAPP }}"><svg aria-hidden="true"><use href="#icon-message"/></svg> WhatsApp: {{ PORTAL_SETTINGS.WHATSAPP }}</a>
       <span class="utility-spacer"></span>
       {% if user.is_authenticated %}<a href="{% url 'core:dashboard' %}">Staff Portal</a><a href="{% url 'accounts:profile' %}">My Account</a><a href="{% url 'notifications:index' %}">Notifications</a><form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button type="submit">Sign out</button></form>{% else %}<a href="{% url 'accounts:login' %}">Staff Login</a>{% endif %}
     </div></div>
@@ -83,7 +82,15 @@
             <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-advisories/" target="_blank" rel="noopener noreferrer">DepEd Advisories <span aria-hidden="true">↗</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
           </div>
         </div>
-        <a href="{% url 'pages:detail' 'about' %}">About</a><a href="{% url 'content:news' %}">News</a><a href="{% url 'schools:directory' %}">Schools</a><a href="{% url 'vacancies:list' %}">Careers</a><a href="{% url 'events:list' %}">Events</a><a href="{% url 'verification:check' %}">Verify</a><a class="nav-search" href="{% url 'core:search' %}" aria-label="Search portal"><svg aria-hidden="true"><use href="#icon-search"/></svg></a>
+        <div class="nav-dropdown">
+          <a class="nav-dropdown-trigger" href="{% url 'pages:detail' 'about' %}" aria-haspopup="true">About <span aria-hidden="true">▾</span></a>
+          <div class="nav-dropdown-menu" aria-label="About SDO Sulu">
+            <a href="{% url 'pages:mission_vision' %}">Mission and Vision</a>
+            <a href="{% url 'pages:detail' 'citizens-charter' %}">Citizens Charter</a>
+            <a href="{% url 'pages:detail' 'contact' %}">Contact Us</a>
+          </div>
+        </div>
+        <a href="{% url 'content:news' %}">News</a><a href="{% url 'schools:directory' %}">Schools</a><a href="{% url 'events:list' %}">Events</a><a class="nav-search" href="{% url 'core:search' %}" aria-label="Search portal"><svg aria-hidden="true"><use href="#icon-search"/></svg></a>
       </div>
     </div></nav>
   </header>
@@ -91,9 +98,18 @@
   <footer class="site-footer">
     <div class="footer-accent" aria-hidden="true"></div>
     <div class="site-shell footer-grid">
-      <div class="footer-brand"><img src="{% static 'logosdo.jpeg' %}" alt="" width="62" height="62"><div><strong>{{ PORTAL_NAME }}</strong><p>{{ PORTAL_SETTINGS.FOOTER_TEXT }}</p><small>{{ PORTAL_SETTINGS.ADDRESS }}</small><small><a href="mailto:{{ PORTAL_SETTINGS.EMAIL }}">{{ PORTAL_SETTINGS.EMAIL }}</a> · <a href="tel:{{ PORTAL_SETTINGS.PHONE_URI }}">{{ PORTAL_SETTINGS.PHONE }}</a> · <a href="{{ PORTAL_SETTINGS.WHATSAPP_URI }}" target="_blank" rel="noopener noreferrer">WhatsApp {{ PORTAL_SETTINGS.WHATSAPP }}</a></small></div></div>
+      <div class="footer-brand"><img src="{% static 'logosdo.jpeg' %}" alt="" width="62" height="62"><div><strong>{{ PORTAL_NAME }}</strong><p>{{ PORTAL_SETTINGS.FOOTER_TEXT }}</p></div></div>
+      <section class="footer-contact" aria-label="Official contact details">
+        <strong>Contact Us</strong>
+        <address>
+          <a href="{{ PORTAL_SETTINGS.MAP_URL }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-pin"/></svg><span>{{ PORTAL_SETTINGS.ADDRESS }}</span></a>
+          <a href="mailto:{{ PORTAL_SETTINGS.EMAIL }}"><svg aria-hidden="true"><use href="#icon-mail"/></svg><span>{{ PORTAL_SETTINGS.EMAIL }}</span></a>
+          <a href="tel:{{ PORTAL_SETTINGS.PHONE_URI }}"><svg aria-hidden="true"><use href="#icon-phone"/></svg><span>{{ PORTAL_SETTINGS.PHONE }}</span></a>
+          <a href="{{ PORTAL_SETTINGS.WHATSAPP_URI }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-message"/></svg><span>WhatsApp: {{ PORTAL_SETTINGS.WHATSAPP }}</span></a>
+        </address>
+      </section>
       <div><strong>Government Links</strong><a href="https://www.deped.gov.ph/" target="_blank" rel="noopener">Department of Education</a><a href="https://www.gov.ph/" target="_blank" rel="noopener">Official Gazette</a></div>
-      <div><strong>Public Information</strong><a href="{% url 'schools:directory' %}">School Directory</a><a href="{% url 'issuances:list' %}">Official Issuances</a><a href="{% url 'verification:check' %}">Verify a Document</a><a href="{% url 'pages:detail' 'contact' %}">Contact</a><a href="{% url 'pages:detail' 'privacy-policy' %}">Privacy Policy</a><a href="{% url 'pages:detail' 'terms-of-use' %}">Terms of Use</a></div>
+      <div><strong>Public Information</strong><a href="{% url 'schools:directory' %}">School Directory</a><a href="{% url 'issuances:list' %}">Official Issuances</a><a href="{% url 'pages:detail' 'contact' %}">Contact</a><a href="{% url 'pages:detail' 'privacy-policy' %}">Privacy Policy</a><a href="{% url 'pages:detail' 'terms-of-use' %}">Terms of Use</a></div>
     </div>
     <div class="footer-bottom"><span>© {% now "Y" %} SDO Sulu. All rights reserved.</span><span>Privacy · Accessibility · Terms of Use</span></div>
   </footer>

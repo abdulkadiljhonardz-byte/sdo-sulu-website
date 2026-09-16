@@ -16,7 +16,7 @@ from offices.models import District, Office
 from schools.models import School
 from vacancies.models import Vacancy
 from verification.models import VerifiedDocument
-from feedback.models import Complaint
+from feedback.models import Complaint, ContactInquiry
 from notifications.models import Notification
 from content.facebook_import import validate_facebook_url
 
@@ -148,7 +148,7 @@ class IssuanceManagementForm(StyledModelForm):
     )
     class Meta:
         model = Issuance
-        fields = ("category", "reference_number", "title", "year", "date_issued", "office", "cover_image", "pdf", "status", "publish_at", "expires_at", "keywords", "archived")
+        fields = ("category", "reference_number", "title", "year", "date_issued", "office", "cover_image", "pdf", "source_url", "status", "publish_at", "expires_at", "is_featured", "keywords", "archived")
         widgets = {"date_issued": forms.DateInput(attrs={"type": "date"}), "publish_at": forms.DateTimeInput(attrs={"type": "datetime-local"}), "expires_at": forms.DateTimeInput(attrs={"type": "datetime-local"})}
 
     def __init__(self, *args, **kwargs):
@@ -157,6 +157,9 @@ class IssuanceManagementForm(StyledModelForm):
             "Required for new memoranda. Upload a JPG or PNG display picture (maximum 10 MB)."
         )
         self.fields["pdf"].help_text = "Upload the complete official memorandum as a valid PDF."
+        self.fields["source_url"].help_text = (
+            "If no PDF is available, link the original post from the official SDO Facebook Page."
+        )
 
     def clean_cover_image(self):
         upload = self.cleaned_data.get("cover_image")
@@ -178,9 +181,26 @@ class IssuanceManagementForm(StyledModelForm):
                 raise forms.ValidationError("The uploaded file is not a valid PDF document.")
         return upload
 
+    def clean_source_url(self):
+        source_url = self.cleaned_data.get("source_url", "").strip()
+        if source_url:
+            source_url = validate_facebook_url(source_url)
+            if Issuance.objects.filter(source_url__iexact=source_url).exclude(
+                pk=self.instance.pk
+            ).exists():
+                raise forms.ValidationError(
+                    "This Facebook post is already linked to another issuance."
+                )
+        return source_url
+
     def clean(self):
         cleaned = super().clean()
         uploaded = self.files.get("pdf")
+        if not cleaned.get("pdf") and not cleaned.get("source_url") and not self.instance.pk:
+            self.add_error(
+                "pdf",
+                "Upload the official PDF or provide the original official Facebook post link.",
+            )
         if self.instance.pk and uploaded and not cleaned.get("revision_reason", "").strip():
             self.add_error("revision_reason", "Explain why the official document is being replaced.")
         reference = cleaned.get("reference_number", "").strip()
@@ -232,7 +252,7 @@ class OfficeManagementForm(StyledModelForm):
 class DistrictManagementForm(StyledModelForm):
     class Meta:
         model = District
-        fields = ("name", "municipality", "active")
+        fields = ("name", "municipality", "public_school_target", "active")
 
 
 class VerifiedDocumentManagementForm(StyledModelForm):
@@ -245,7 +265,8 @@ class VerifiedDocumentManagementForm(StyledModelForm):
 class PublicPageManagementForm(StyledModelForm):
     protected_slugs = {
         "about", "mission", "vision", "core-values", "officials",
-        "organizational-structure", "privacy-policy", "terms-of-use",
+        "organizational-structure", "citizens-charter", "privacy-policy",
+        "terms-of-use",
     }
     class Meta:
         model = PublicPage
@@ -264,6 +285,12 @@ class PublicPageManagementForm(StyledModelForm):
         return slug
 
 
+class ContactInquiryManagementForm(StyledModelForm):
+    class Meta:
+        model = ContactInquiry
+        fields = ("status",)
+
+
 class PortalSettingsForm(forms.Form):
     sdo_name = forms.CharField(max_length=200, label="Official SDO name")
     address = forms.CharField(max_length=255)
@@ -274,6 +301,11 @@ class PortalSettingsForm(forms.Form):
         required=False,
         label="WhatsApp number",
         help_text="Include the country code, for example +63 966 175 6976.",
+    )
+    map_url = forms.URLField(
+        required=False,
+        label="Google Maps location link",
+        help_text="Use the official Google Maps place or pin URL for the office.",
     )
     office_hours = forms.CharField(max_length=160, required=False)
     homepage_banner = forms.CharField(widget=forms.Textarea, required=False)

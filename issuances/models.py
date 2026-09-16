@@ -31,16 +31,23 @@ class Issuance(TimeStampedModel):
 
     category = models.CharField(max_length=30, choices=Category.choices)
     reference_number = models.CharField(max_length=100, unique=True); title = models.CharField(max_length=255)
-    description = models.TextField(blank=True); year = models.PositiveIntegerField(); date_issued = models.DateField()
+    description = models.TextField(blank=True); year = models.PositiveIntegerField(); date_issued = models.DateField(null=True, blank=True)
     office = models.ForeignKey(Office, null=True, on_delete=models.SET_NULL)
     cover_image = models.ImageField(upload_to=issuance_cover_upload, blank=True)
-    pdf = models.FileField(upload_to=issuance_upload)
+    pdf = models.FileField(upload_to=issuance_upload, blank=True)
+    source_url = models.URLField(
+        "Official source link",
+        max_length=1000,
+        blank=True,
+        help_text="Optional link to the original official Facebook post.",
+    )
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="created_issuances")
     status = models.CharField(max_length=20, default="PUBLISHED"); keywords = models.CharField(max_length=500, blank=True)
     publish_at = models.DateTimeField(null=True, blank=True)
     expires_at = models.DateTimeField(null=True, blank=True)
+    is_featured = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
-    class Meta: ordering = ["-date_issued"]
+    class Meta: ordering = ["-year", "-date_issued", "-created_at"]
     def __str__(self): return f"{self.reference_number} — {self.title}"
 
 

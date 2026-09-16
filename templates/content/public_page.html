@@ -14,7 +14,7 @@
     <a href="mailto:{{ PORTAL_SETTINGS.EMAIL }}"><svg aria-hidden="true"><use href="#icon-mail"/></svg><span><small>Email</small><strong>{{ PORTAL_SETTINGS.EMAIL }}</strong></span></a>
     <a href="tel:{{ PORTAL_SETTINGS.PHONE_URI }}"><svg aria-hidden="true"><use href="#icon-phone"/></svg><span><small>Contact number</small><strong>{{ PORTAL_SETTINGS.PHONE }}</strong></span></a>
     <a href="{{ PORTAL_SETTINGS.WHATSAPP_URI }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-message"/></svg><span><small>WhatsApp</small><strong>{{ PORTAL_SETTINGS.WHATSAPP }}</strong></span></a>
-    <div><svg aria-hidden="true"><use href="#icon-pin"/></svg><span><small>Office address</small><strong>{{ PORTAL_SETTINGS.ADDRESS }}</strong></span></div>
+    <a href="{{ PORTAL_SETTINGS.MAP_URL }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-pin"/></svg><span><small>Office address · Open Google Maps</small><strong>{{ PORTAL_SETTINGS.ADDRESS }}</strong></span></a>
   </section>
   {% endif %}
 </article>

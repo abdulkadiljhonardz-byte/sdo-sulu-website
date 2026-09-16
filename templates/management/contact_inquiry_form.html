@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% block title %}Review Contact Inquiry — SDO Sulu{% endblock %}
+{% block content %}
+<div class="management-form-layout">
+  <header>
+    <p>Contact inquiry · {{ inquiry.created_at|date:"F d, Y g:i A" }}</p>
+    <h1>{{ inquiry.name }}</h1>
+    <span>{{ inquiry.message }}</span>
+    <dl class="inquiry-contact-meta">
+      <dt>Email</dt><dd><a href="mailto:{{ inquiry.email }}">{{ inquiry.email }}</a></dd>
+      <dt>Phone</dt><dd><a href="tel:{{ inquiry.phone }}">{{ inquiry.phone }}</a></dd>
+      <dt>Address</dt><dd>{{ inquiry.address|default:"Not provided" }}</dd>
+    </dl>
+  </header>
+  <form method="post" class="management-form">{% csrf_token %}{{ form.as_p }}<div class="form-actions"><button>Update status</button><a href="{% url 'core:feedback_management' %}?tab=inquiries">Cancel</a></div></form>
+</div>
+{% endblock %}

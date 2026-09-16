@@ -1,5 +1,5 @@
 from django.db.models import Q
-from django.http import FileResponse
+from django.http import FileResponse, Http404
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -26,6 +26,8 @@ def download(request, pk):
         .filter(Q(expires_at__isnull=True) | Q(expires_at__gt=now)),
         pk=pk,
     )
+    if not item.pdf:
+        raise Http404("No PDF is available for this issuance.")
     record_event(request, AnalyticsEvent.Type.ISSUANCE_DOWNLOAD, item)
     return FileResponse(item.pdf.open("rb"), as_attachment=True, filename=f"{item.reference_number}.pdf")
 

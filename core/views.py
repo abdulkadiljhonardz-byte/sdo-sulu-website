@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db import connection
 from django.http import JsonResponse
+from django.urls import reverse
 from django.shortcuts import render
 from django.utils import timezone
 from content.models import Download, News
@@ -22,7 +23,43 @@ def _active_window(queryset, publish_field, expiry_field="expires_at"):
 def home(request):
     from django.utils import timezone
 
+    featured_news = _active_window(
+        News.objects.filter(is_published=True, is_featured=True, archived=False),
+        "published_at",
+    ).order_by("-published_at", "-created_at").first()
+    featured_memo = _active_window(
+        Issuance.objects.filter(
+            status="PUBLISHED",
+            is_featured=True,
+            archived=False,
+        ),
+        "publish_at",
+    ).order_by("-date_issued", "-created_at").first()
+    featured_candidates = []
+    if featured_news:
+        featured_candidates.append({
+            "title": featured_news.title,
+            "published_date": (featured_news.published_at or featured_news.created_at).date(),
+            "url": reverse("content:news_detail", args=[featured_news.slug]),
+            "kind": "News",
+            "sort_date": featured_news.published_at or featured_news.created_at,
+        })
+    if featured_memo:
+        featured_candidates.append({
+            "title": featured_memo.title,
+            "published_date": featured_memo.date_issued or featured_memo.created_at.date(),
+            "url": reverse("issuances:detail", args=[featured_memo.pk]),
+            "kind": featured_memo.get_category_display(),
+            "sort_date": featured_memo.publish_at or featured_memo.created_at,
+        })
+    featured_advisory = max(
+        featured_candidates,
+        key=lambda item: item["sort_date"],
+        default=None,
+    )
+
     return render(request, "core/home.html", {
+        "featured_advisory": featured_advisory,
         "news": _active_window(News.objects.filter(is_published=True, archived=False), "published_at")[:3],
         "events": Event.objects.filter(start__gte=timezone.now()).order_by("start")[:4],
         "latest_memos": _active_window(

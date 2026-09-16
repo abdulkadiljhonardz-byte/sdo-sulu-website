@@ -218,7 +218,7 @@ def download_facebook_image(image_url, page_url="https://www.facebook.com/"):
     return image_bytes, f"facebook-cover.{extension}", content_type
 
 
-def import_facebook_post(value):
+def import_facebook_post(value, *, require_text=True):
     """Return caption and cover image exposed by a public Facebook post."""
     try:
         safe_url = validate_facebook_url(value)
@@ -241,7 +241,7 @@ def import_facebook_post(value):
     )
     title = _derive_title(parser.values.get("og:title") or parser.page_title, caption)
     image_url = parser.values.get("og:image")
-    if not title or not caption:
+    if require_text and (not title or not caption):
         raise FacebookImportError(
             "The post caption is not publicly available. Confirm that the post is Public, or copy the caption manually."
         )
