@@ -1,0 +1,234 @@
+.home-memos-section {
+  padding: 72px 0;
+  background: #f2f5f3;
+}
+
+.memo-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+}
+
+.memo-card {
+  overflow: hidden;
+  border: 1px solid #dbe5e0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 13px 32px rgba(5, 61, 46, .09);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.memo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 38px rgba(5, 61, 46, .14);
+}
+
+.memo-card-banner {
+  position: relative;
+  display: flex;
+  height: 178px;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: 28px 34px;
+  background: linear-gradient(110deg, rgba(1, 61, 40, .92), rgba(9, 145, 80, .78)), url('../sdooffice.png') center 48% / cover;
+  color: #fff;
+}
+
+.memo-card:nth-child(even) .memo-card-banner:not(.has-cover) {
+  background: linear-gradient(110deg, rgba(123, 49, 5, .86), rgba(244, 123, 32, .74)), url('../sdooffice.png') center 48% / cover;
+}
+
+.memo-card-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(135deg, transparent 0 46px, rgba(255, 255, 255, .04) 47px 48px);
+}
+
+.memo-card-banner span,
+.memo-card-banner strong {
+  position: relative;
+  z-index: 1;
+}
+
+.memo-card-banner span {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.memo-card-banner strong {
+  margin-top: 6px;
+  font-family: "Libre Baskerville", serif;
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.memo-card-banner b {
+  position: absolute;
+  right: 15px;
+  bottom: -27px;
+  color: rgba(255, 255, 255, .11);
+  font-size: 5.3rem;
+  line-height: 1;
+}
+
+.memo-card-banner.has-cover {
+  display: block;
+  padding: 0;
+  background: #dfe9e4;
+}
+
+.memo-card-banner.has-cover::before {
+  display: none;
+}
+
+.memo-card-banner.has-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+
+.memo-card:hover .memo-card-banner.has-cover img {
+  transform: scale(1.025);
+}
+
+.memo-card-content {
+  padding: 21px 25px 23px;
+}
+
+.memo-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  color: #64766d;
+  font-size: .72rem;
+}
+
+.memo-card-meta time {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.memo-card-meta svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+.memo-card-meta > span {
+  padding: 4px 9px;
+  border: 1px solid #b8d4c6;
+  border-radius: 999px;
+  background: #edf7f1;
+  color: #087a4b;
+  font-size: .62rem;
+  font-weight: 750;
+}
+
+.memo-card h3 {
+  margin: 17px 0 9px;
+  color: #153e30;
+  font-family: "Libre Baskerville", serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.memo-card h3 a:hover {
+  color: #087a4b;
+}
+
+.memo-card footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e1e8e4;
+}
+
+.memo-card footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border: 1px solid #9fc2b1;
+  border-radius: 6px;
+  color: #087a4b;
+  font-size: .7rem;
+  font-weight: 750;
+}
+
+.memo-card footer a:last-child {
+  border-color: transparent;
+  background: #07513b;
+  color: #fff;
+}
+
+.memo-card footer svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.memo-empty {
+  grid-column: 1 / -1;
+}
+
+.home-public-strip {
+  padding: 68px 0;
+  background: #fff;
+}
+
+.public-strip-grid {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 72px;
+  align-items: start;
+}
+
+@media (max-width: 850px) {
+  .memo-card-grid,
+  .public-strip-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-strip-grid {
+    gap: 50px;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-memos-section,
+  .home-public-strip {
+    padding: 50px 0;
+  }
+
+  .memo-card-banner {
+    height: 145px;
+    padding: 24px;
+  }
+
+  .memo-card-banner.has-cover {
+    padding: 0;
+  }
+
+  .memo-card-banner b {
+    font-size: 4rem;
+  }
+
+  .memo-card-content {
+    padding: 18px;
+  }
+
+  .memo-card-meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

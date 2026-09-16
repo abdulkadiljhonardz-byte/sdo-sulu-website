@@ -1,0 +1,15 @@
+[Unit]
+Description=Back up SDO Sulu PostgreSQL database and uploaded media
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+EnvironmentFile=/srv/sdo-sulu/.env
+Environment=BACKUP_ROOT=/var/backups/sdo-sulu
+ExecStart=/srv/sdo-sulu/deployment/backup.sh
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/backups/sdo-sulu

@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ config.label }} — Content Management{% endblock %}
+{% block content %}
+<header class="management-heading"><div><p><a href="{% url 'core:content_management' %}">System Administration</a></p><h1>{{ config.label }}</h1><span>Search and maintain official portal records.</span></div>{% if can_add %}<a href="{% url 'core:content_create' kind %}">Add {{ config.singular }}</a>{% endif %}</header>
+<form method="get" class="management-filters compact" role="search"><label><span>Search {{ config.label|lower }}</span><input type="search" name="q" value="{{ query }}" placeholder="Enter title, reference, or keyword"></label><button type="submit">Search</button></form>
+<div class="managed-records">
+{% for item in page %}
+  <article>
+    {% if kind == 'news' or kind == 'issuances' %}{% if item.cover_image %}<img class="managed-cover-thumb" src="{{ item.cover_image.url }}" alt="" loading="lazy">{% endif %}{% endif %}
+    <div>
+      {% if kind == 'issuances' %}<strong>{{ item.reference_number }} — {{ item.title }}</strong><small>{{ item.get_category_display }} · {{ item.date_issued|date:"M d, Y" }} · {{ item.status }}</small>
+      {% elif kind == 'vacancies' %}<strong>{{ item.position }}</strong><small>{{ item.office }} · Deadline {{ item.deadline|date:"M d, Y" }} · {{ item.status }}</small>
+      {% elif kind == 'schools' %}<strong>{{ item.name }}</strong><small>{{ item.school_id }} · {{ item.district }} · {{ item.status }}</small>
+      {% elif kind == 'events' %}<strong>{{ item.title }}</strong><small>{{ item.start|date:"M d, Y g:i A" }} · {{ item.location|default:"Location not specified" }}</small>
+      {% elif kind == 'downloads' %}<strong>{{ item.title }}</strong><small>{{ item.category }} · {% if item.published %}Published{% else %}Draft{% endif %}</small>
+      {% elif kind == 'offices' %}<strong>{{ item.name }}</strong><small>{{ item.code }} · {{ item.email|default:"No email" }} · {% if item.active %}Active{% else %}Inactive{% endif %}</small>
+      {% elif kind == 'districts' %}<strong>{{ item.name }}</strong><small>{{ item.municipality }} · {% if item.active %}Active{% else %}Inactive{% endif %}</small>
+      {% elif kind == 'verified-documents' %}<strong>{{ item.document_number }} — {{ item.document_type }}</strong><small>{{ item.issuing_office }} · {{ item.date_issued|date:"M d, Y" }} · {{ item.status }}</small>
+      {% elif kind == 'public-pages' %}<strong>{{ item.title }}</strong><small>/information/{{ item.slug }}/ · {% if item.published %}Published{% else %}Draft{% endif %}</small>
+      {% else %}<strong>{{ item.title }}</strong><small>{{ item.category|default:"Uncategorized" }} · {% if item.is_published %}Published{% else %}Draft{% endif %}{% if item.archived %} · Archived{% endif %}</small>{% endif %}
+    </div>
+    <div class="managed-actions"><a href="{% url 'core:content_preview' kind item.pk %}">Preview</a>{% if can_change %}<a href="{% url 'core:content_update' kind item.pk %}">Edit</a>{% if kind == 'issuances' or kind == 'news' or kind == 'downloads' %}<form method="post" action="{% url 'core:content_archive' kind item.pk %}" onsubmit="return confirm('Archive this record? It will be removed from the public portal.');">{% csrf_token %}<input type="hidden" name="confirm" value="ARCHIVE"><button type="submit">Archive</button></form>{% endif %}{% endif %}{% if can_delete %}<form method="post" action="{% url 'core:content_delete' kind item.pk %}" onsubmit="return confirm('Permanently delete this {{ config.singular }}? This cannot be undone and its uploaded files will also be removed.');">{% csrf_token %}<input type="hidden" name="confirm" value="DELETE"><button class="delete-action" type="submit">Delete</button></form>{% endif %}</div>
+  </article>
+{% empty %}<p class="empty-panel">No matching records found.</p>{% endfor %}
+</div>
+{% if page.has_other_pages %}<nav class="management-pagination" aria-label="Content list pages">{% if page.has_previous %}<a href="?q={{ query|urlencode }}&amp;page={{ page.previous_page_number }}">Previous</a>{% endif %}<span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>{% if page.has_next %}<a href="?q={{ query|urlencode }}&amp;page={{ page.next_page_number }}">Next</a>{% endif %}</nav>{% endif %}
+{% endblock %}

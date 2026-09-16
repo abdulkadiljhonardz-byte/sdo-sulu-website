@@ -1,0 +1,7 @@
+[Unit]
+Description=Check SDO Sulu application health
+After=sdo-sulu.service nginx.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/curl --fail --silent --show-error --max-time 10 https://portal.example.gov.ph/health/

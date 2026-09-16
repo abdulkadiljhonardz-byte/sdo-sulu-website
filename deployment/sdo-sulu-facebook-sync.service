@@ -1,0 +1,17 @@
+[Unit]
+Description=Synchronize official SDO Sulu Facebook News
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+WorkingDirectory=/srv/sdo-sulu
+EnvironmentFile=/srv/sdo-sulu/.env
+ExecStart=/srv/sdo-sulu/.venv/bin/python manage.py sync_facebook_news
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/sdo-sulu/media

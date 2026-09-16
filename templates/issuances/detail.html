@@ -1,0 +1,5 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ item.reference_number }} — SDO Sulu{% endblock %}
+{% block content %}
+<article class="publication-detail issuance-detail"><header><p>{{ item.get_category_display }}{% if item.office %} · {{ item.office }}{% endif %}</p><h1>{{ item.title }}</h1><span>{{ item.reference_number }} · Issued {{ item.date_issued|date:"F d, Y" }}</span></header>{% if item.cover_image %}<figure><img src="{{ item.cover_image.url }}" alt="Cover image for {{ item.reference_number }}"></figure>{% endif %}<aside class="publication-source issuance-download-panel"><strong>Official PDF document</strong><p>Download the complete signed issuance from the SDO Sulu repository.</p><a href="{% url 'issuances:download' item.pk %}"><svg><use href="#icon-document"/></svg> Download PDF</a></aside></article>
+{% endblock %}

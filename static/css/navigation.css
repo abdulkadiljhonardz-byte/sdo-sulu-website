@@ -1,0 +1,104 @@
+.nav-dropdown {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.nav-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-dropdown-trigger span {
+  font-size: 0.72rem;
+  transition: transform 160ms ease;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  z-index: 50;
+  top: 100%;
+  left: 50%;
+  width: 310px;
+  padding: 22px 0;
+  background: #fff;
+  color: #17382f;
+  border-top: 5px solid #f8bd16;
+  box-shadow: 0 22px 45px rgba(3, 46, 37, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 10px);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
+}
+
+.nav-dropdown-menu a {
+  display: block;
+  padding: 12px 36px;
+  color: #17382f;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.nav-dropdown-menu a:hover,
+.nav-dropdown-menu a:focus-visible {
+  color: #064e3b;
+  background: #edf6f1;
+  box-shadow: inset 4px 0 #f8bd16;
+  outline: none;
+}
+
+.nav-dropdown-menu .external-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nav-dropdown-menu .external-link > span[aria-hidden="true"] {
+  color: #087d4d;
+  font-size: 0.9rem;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.nav-dropdown:hover .nav-dropdown-trigger span,
+.nav-dropdown:focus-within .nav-dropdown-trigger span {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1000px) {
+  .nav-dropdown {
+    display: block;
+    align-self: auto;
+  }
+
+  .nav-dropdown-trigger {
+    justify-content: space-between;
+  }
+
+  .nav-dropdown-menu {
+    position: static;
+    width: auto;
+    padding: 4px 0 8px 14px;
+    border-top: 0;
+    border-left: 3px solid #064e3b;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.24);
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .nav-dropdown-menu a {
+    padding: 8px 12px;
+    font-size: 0.88rem;
+  }
+}

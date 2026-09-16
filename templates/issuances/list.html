@@ -1,0 +1,29 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}{{ category_label }} — SDO Sulu{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/issuances.css' %}">{% endblock %}
+{% block content %}
+<header class="repository-header">
+  <p class="repository-kicker">Official Documents</p>
+  <h1>{{ category_label }}</h1>
+  <p>Search and download official issuances published by the Schools Division Office of Sulu.</p>
+</header>
+
+<nav class="category-tabs" aria-label="Issuance category filters">
+  <a href="{% url 'issuances:list' %}" {% if not category %}class="active" aria-current="page"{% endif %}>All</a>
+  {% for value,label in categories %}<a href="{% url 'issuances:list' %}?category={{ value }}" {% if category == value %}class="active" aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
+</nav>
+
+<form class="repository-search" method="get">
+  {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
+  <label for="issuance-search">Search title, reference number, or keyword</label>
+  <div><input id="issuance-search" name="q" value="{{ q }}" placeholder="e.g. Division Memorandum No. 123"><button type="submit"><svg><use href="#icon-search"/></svg> Search</button></div>
+</form>
+
+<div class="repository-table-wrap">
+  <table class="repository-table">
+    <thead><tr><th>Reference number</th><th>Title</th><th>Category</th><th>Date issued</th><th><span class="sr-only">Download</span></th></tr></thead>
+    <tbody>{% for item in items %}<tr><td><strong>{{ item.reference_number }}</strong></td><td><a class="document-title" href="{% url 'issuances:detail' item.pk %}">{{ item.title }}</a>{% if item.office %}<small>{{ item.office }}</small>{% endif %}</td><td><span class="category-badge">{{ item.get_category_display }}</span></td><td>{{ item.date_issued|date:"M d, Y" }}</td><td><a class="download-link" href="{% url 'issuances:download' item.pk %}" aria-label="Download {{ item.title }}"><svg><use href="#icon-document"/></svg> PDF</a></td></tr>{% empty %}<tr><td class="repository-empty" colspan="5">No published issuances found{% if q %} for “{{ q }}”{% endif %}.</td></tr>{% endfor %}</tbody>
+  </table>
+</div>
+{% endblock %}

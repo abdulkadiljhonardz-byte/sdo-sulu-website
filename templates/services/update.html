@@ -1,0 +1,1 @@
+{% extends 'base/base.html' %}{% block content %}<h1>Update {{ item.tracking_number }}</h1><form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button class="bg-blue-900 text-white p-2">Save</button></form>{% endblock %}

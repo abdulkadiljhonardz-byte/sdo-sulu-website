@@ -1,0 +1,10 @@
+[Unit]
+Description=Five-minute SDO Sulu health check
+
+[Timer]
+OnBootSec=2m
+OnUnitActiveSec=5m
+Unit=sdo-sulu-health.service
+
+[Install]
+WantedBy=timers.target

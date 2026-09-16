@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ page.title }} — SDO Sulu{% endblock %}
+{% block content %}
+<article class="public-information-page">
+  <header>
+    <p>Schools Division Office of Sulu</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<span>{{ page.summary }}</span>{% endif %}
+  </header>
+  {% if page.image %}<img src="{{ page.image.url }}" alt="{{ page.title }}">{% endif %}
+  <div class="public-page-body">{{ page.body|linebreaks }}</div>
+  {% if page.slug == 'contact' %}
+  <section class="official-contact-grid" aria-label="Official contact details">
+    <a href="mailto:{{ PORTAL_SETTINGS.EMAIL }}"><svg aria-hidden="true"><use href="#icon-mail"/></svg><span><small>Email</small><strong>{{ PORTAL_SETTINGS.EMAIL }}</strong></span></a>
+    <a href="tel:{{ PORTAL_SETTINGS.PHONE_URI }}"><svg aria-hidden="true"><use href="#icon-phone"/></svg><span><small>Contact number</small><strong>{{ PORTAL_SETTINGS.PHONE }}</strong></span></a>
+    <a href="{{ PORTAL_SETTINGS.WHATSAPP_URI }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-message"/></svg><span><small>WhatsApp</small><strong>{{ PORTAL_SETTINGS.WHATSAPP }}</strong></span></a>
+    <div><svg aria-hidden="true"><use href="#icon-pin"/></svg><span><small>Office address</small><strong>{{ PORTAL_SETTINGS.ADDRESS }}</strong></span></div>
+  </section>
+  {% endif %}
+</article>
+{% endblock %}

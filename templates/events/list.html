@@ -1,0 +1,1 @@
+{% extends 'base/base.html' %}{% block content %}<h1 class="text-3xl font-bold">Events</h1>{% for item in items %}<article class="bg-white p-4 mt-3"><h2>{{ item.title }}</h2><p>{{ item.start }} · {{ item.location }}</p></article>{% empty %}<p>No upcoming events.</p>{% endfor %}{% endblock %}

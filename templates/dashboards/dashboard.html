@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+{% block title %}Staff Portal — SDO Sulu{% endblock %}
+{% block content %}
+<header class="dashboard-welcome">
+  <div>
+    <p>Welcome back</p>
+    <h1>{{ user.get_full_name|default:user.username }}</h1>
+    <span>{{ user.get_role_display }}</span>
+  </div>
+  <div class="dashboard-actions">
+    {% if user.is_superuser or user.role == 'SUPER_ADMIN' %}<a href="{% url 'accounts:user_management' %}">Manage Users</a>{% endif %}
+    {% if user.is_staff_member %}<a href="{% url 'core:content_management' %}">System Administration</a>{% endif %}
+    <a href="{% url 'accounts:profile' %}">Manage Account</a>
+    <a href="{% url 'notifications:index' %}">Notifications</a>
+  </div>
+</header>
+
+<section class="dashboard-metrics">
+  <div><strong>{{ unread_notifications }}</strong><span>Unread notifications</span></div>
+  <div><strong>Info</strong><span>Portal mode</span></div>
+  <div><strong>Secure</strong><span>Staff access</span></div>
+</section>
+
+<div class="dashboard-grid">
+  <section>
+    <div class="panel-title"><h2>Manage portal content</h2></div>
+    {% if user.is_superuser or user.role == 'SUPER_ADMIN' %}
+      <a class="dashboard-record" href="{% url 'accounts:user_management' %}"><span><strong>Users &amp; Roles</strong><small>Create staff accounts and assign controlled system roles.</small></span><b>Manage</b></a>
+    {% endif %}
+    {% if user.is_staff_member %}
+      <a class="dashboard-record" href="{% url 'core:content_management' %}"><span><strong>System Administration</strong><small>Manage content, offices, settings, verification, feedback, and oversight records.</small></span><b>Open</b></a>
+    {% else %}
+      <p class="empty-panel">Your account does not have content administration permission.</p>
+    {% endif %}
+  </section>
+  <section>
+    <div class="panel-title"><h2>Public information</h2></div>
+    <a class="dashboard-record" href="{% url 'issuances:list' %}"><span><strong>Official Issuances</strong><small>Browse published memoranda and advisories.</small></span><b>View</b></a>
+    <a class="dashboard-record" href="{% url 'schools:directory' %}"><span><strong>School Directory</strong><small>View registered schools and their public details.</small></span><b>View</b></a>
+  </section>
+  <section>
+    <div class="panel-title"><h2>Notifications</h2><a href="{% url 'notifications:index' %}">View all</a></div>
+    {% for item in notifications %}<div class="dashboard-record"><span><strong>{{ item.title }}</strong><small>{{ item.message }}</small></span>{% if not item.read_at %}<i>New</i>{% endif %}</div>{% empty %}<p class="empty-panel">No notifications.</p>{% endfor %}
+  </section>
+</div>
+{% endblock %}

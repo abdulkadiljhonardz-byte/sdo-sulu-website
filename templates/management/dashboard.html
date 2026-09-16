@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{% block title %}System Administration — SDO Sulu{% endblock %}
+{% block content %}
+<header class="management-heading"><div><p>Staff Portal</p><h1>System Administration</h1><span>Manage portal information, organization records, access, and oversight tools.</span></div><a href="{% url 'core:dashboard' %}">Back to dashboard</a></header>
+{% if is_system_admin %}<section class="admin-tool-strip">
+  <a href="{% url 'core:analytics_dashboard' %}"><strong>Dashboard Analytics</strong><small>Usage and publishing data</small></a>
+  <a href="{% url 'core:data_workspace' %}"><strong>Data Import &amp; Export</strong><small>CSV and Excel workflows</small></a>
+  <a href="{% url 'core:facebook_news_sync' %}"><strong>Facebook News Sync</strong><small>Official Page posts from 2026–2027</small></a>
+  <a href="{% url 'core:reports' %}"><strong>Reports</strong><small>Filtered CSV, Excel, and PDF</small></a>
+  <a href="{% url 'accounts:user_management' %}"><strong>Users &amp; Roles</strong><small>Accounts and access</small></a>
+  <a href="{% url 'core:portal_settings' %}"><strong>Portal Settings</strong><small>Identity and maintenance</small></a>
+  <a href="{% url 'core:feedback_management' %}"><strong>Feedback &amp; Complaints</strong><small>Private public submissions</small></a>
+  <a href="{% url 'core:notification_management' %}"><strong>Notifications</strong><small>Send staff notices</small></a>
+  <a href="{% url 'core:audit_management' %}"><strong>Audit Trail</strong><small>Read-only activity history</small></a>
+  <a href="{% url 'core:legacy_records' %}"><strong>Archived Transactions</strong><small>Read-only retained records</small></a>
+</section>{% endif %}
+<div class="management-section-label"><span>Portal records</span></div>
+<div class="content-management-grid">
+  {% for card in cards %}<a href="{% url 'core:content_list' card.kind %}"><span>{{ card.count }}</span><strong>{{ card.label }}</strong><small>Manage records</small></a>{% empty %}<p class="empty-panel">Your account has no assigned content permissions.</p>{% endfor %}
+</div>
+{% endblock %}

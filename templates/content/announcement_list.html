@@ -1,0 +1,8 @@
+{% extends 'base/base.html' %}
+{% block title %}Announcements — SDO Sulu{% endblock %}
+{% block content %}
+<header class="publication-index-heading"><div><p>Official notices</p><h1>Announcements</h1><span>Current advisories, schedules, and important public information from SDO Sulu.</span></div><a href="{% url 'content:news' %}">View news</a></header>
+<form method="get" class="publication-search" role="search"><label for="announcement-search">Search announcements</label><div><input id="announcement-search" type="search" name="q" value="{{ query }}" placeholder="Search by title, caption, or category"><button type="submit">Search</button></div></form>
+<div class="publication-card-grid">{% for item in page %}<article class="publication-card{% if item.important %} important{% endif %}"><a class="publication-card-image" href="{% url 'announcements:detail' item.slug %}">{% if item.cover_image %}<img src="{{ item.cover_image.url }}" alt="Cover photo for {{ item.title }}">{% else %}<span>OFFICIAL NOTICE</span>{% endif %}</a><div><p>{% if item.important %}Important · {% endif %}{{ item.category|default:"Announcement" }}</p><h2><a href="{% url 'announcements:detail' item.slug %}">{{ item.title }}</a></h2><span>{{ item.body|striptags|truncatewords:25 }}</span><small>{{ item.published_at|date:"F d, Y" }}</small></div></article>{% empty %}<p class="publication-empty">No active announcements matched your search.</p>{% endfor %}</div>
+{% include 'content/publication_pagination.html' %}
+{% endblock %}

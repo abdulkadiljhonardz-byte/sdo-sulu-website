@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% block title %}Users &amp; Roles — SDO Sulu{% endblock %}
+{% block content %}
+<header class="management-heading">
+  <div><p>System administration</p><h1>Users &amp; Roles</h1><span>Create accounts, assign roles, and control system access.</span></div>
+  <a href="{% url 'accounts:user_create' %}">Add account</a>
+</header>
+<form method="get" class="management-filters" role="search">
+  <label><span>Search users</span><input type="search" name="q" value="{{ query }}" placeholder="Name, username, or email"></label>
+  <label><span>Role</span><select name="role"><option value="">All roles</option>{% for value, label in roles %}{% if value != 'SUPER_ADMIN' %}<option value="{{ value }}" {% if selected_role == value %}selected{% endif %}>{{ label }}</option>{% endif %}{% endfor %}</select></label>
+  <button type="submit">Apply filters</button>
+</form>
+<div class="user-table-wrap"><table class="user-table"><thead><tr><th>User</th><th>Role</th><th>Status</th><th>Last login</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody>
+  {% for item in page %}<tr><td><strong>{{ item.get_full_name|default:item.username }}</strong><small>{{ item.username }} · {{ item.email }}</small></td><td><span class="role-pill">{{ item.get_role_display }}</span></td><td>{% if item.is_active %}<span class="account-active">Active</span>{% else %}<span class="account-disabled">Disabled</span>{% endif %}</td><td>{{ item.last_login|date:"M d, Y g:i A"|default:"Never" }}</td><td><a href="{% url 'accounts:user_update' item.pk %}">Edit</a></td></tr>{% empty %}<tr><td colspan="5" class="empty-panel">No matching accounts found.</td></tr>{% endfor %}
+</tbody></table></div>
+{% if page.has_other_pages %}<nav class="management-pagination" aria-label="User list pages">{% if page.has_previous %}<a href="?q={{ query|urlencode }}&amp;role={{ selected_role|urlencode }}&amp;page={{ page.previous_page_number }}">Previous</a>{% endif %}<span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>{% if page.has_next %}<a href="?q={{ query|urlencode }}&amp;role={{ selected_role|urlencode }}&amp;page={{ page.next_page_number }}">Next</a>{% endif %}</nav>{% endif %}
+{% endblock %}

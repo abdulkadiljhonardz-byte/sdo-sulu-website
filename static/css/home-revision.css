@@ -1,0 +1,145 @@
+.home-masthead {
+  min-height: 440px;
+  color: #173d2f;
+  background: #fff;
+  border-top: 1px solid #e1e9e5;
+  border-bottom: 0;
+}
+
+.masthead-map {
+  position: absolute;
+  z-index: 0;
+  inset: 0 auto 0 -3%;
+  width: 59%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+  opacity: 0.105;
+  filter: sepia(1) hue-rotate(82deg) saturate(1.7) contrast(1.1);
+  mix-blend-mode: multiply;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 67%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 67%, transparent 100%);
+  pointer-events: none;
+  animation: map-settle 1.2s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes map-settle {
+  from { opacity: 0; transform: translateX(-22px) scale(1.025); }
+  to { opacity: .105; transform: translateX(0) scale(1); }
+}
+
+.home-masthead::before { display: none; }
+
+.home-masthead::after {
+  right: -70px;
+  bottom: -190px;
+  left: auto;
+  z-index: 0;
+  width: 540px;
+  height: 320px;
+  border: 55px solid rgba(255, 255, 255, 0.055);
+}
+
+.masthead-lines {
+  right: 0;
+  left: auto;
+  width: 46%;
+  background:
+    radial-gradient(circle at 72% 18%, rgba(244, 123, 32, 0.3), transparent 23%),
+    linear-gradient(135deg, #064833, #07804d 72%, #14945b);
+  clip-path: polygon(17% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.masthead-lines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 48px, rgba(255,255,255,.025) 49px 50px),
+    linear-gradient(165deg, transparent 60%, rgba(0,0,0,.08));
+}
+
+.masthead-grid {
+  min-height: 440px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.masthead-copy { padding-right: 50px; }
+.masthead-label { color: #087a4b; }
+
+.masthead-copy h1 {
+  background: none;
+  color: #064833;
+  text-shadow: none;
+}
+
+.masthead-copy h1 small { color: #526a60; }
+.masthead-copy > p:not(.masthead-label) { color: #60736b; }
+
+.masthead-actions .primary-action {
+  background: #087a4b;
+  box-shadow: 0 10px 22px rgba(5, 89, 53, 0.2);
+}
+
+.masthead-actions .primary-action:hover { background: #f47b20; }
+
+.masthead-actions .text-action {
+  color: #07513b;
+  border-color: #9dbeb0;
+}
+
+.masthead-actions .text-action:hover {
+  color: #dc6512;
+  border-color: #f47b20;
+}
+
+.masthead-identity { z-index: 2; }
+.masthead-identity span { color: #e2f1ea; }
+
+.masthead-identity img {
+  border-color: #fff;
+  box-shadow: 0 24px 55px rgba(0, 42, 25, 0.34);
+}
+
+.seal-halo { border-color: rgba(255, 255, 255, 0.24); }
+
+@media (max-width: 900px) {
+  .masthead-map {
+    width: 68%;
+    opacity: .075;
+  }
+  .masthead-lines {
+    width: 40%;
+    clip-path: polygon(24% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .masthead-copy { padding-right: 28px; }
+}
+
+@media (max-width: 700px) {
+  .masthead-map {
+    inset: 0;
+    width: 100%;
+    opacity: .055;
+    object-position: center;
+    -webkit-mask-image: linear-gradient(#000 0%, transparent 100%);
+    mask-image: linear-gradient(#000 0%, transparent 100%);
+  }
+  .home-masthead {
+    min-height: 0;
+    border-bottom: 5px solid #f47b20;
+  }
+  .masthead-lines {
+    display: block;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    height: 9px;
+    clip-path: none;
+  }
+  .masthead-copy { padding-right: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .masthead-map { animation: none; }
+}

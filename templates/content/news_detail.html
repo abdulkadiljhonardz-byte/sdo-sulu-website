@@ -1,0 +1,5 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ item.title }} — SDO Sulu{% endblock %}
+{% block content %}
+<article class="publication-detail"><header><p>{{ item.category|default:"Division News" }}{% if item.office %} · {{ item.office }}{% endif %}</p><h1>{{ item.title }}</h1><span>Published {{ item.published_at|date:"F d, Y" }}{% if item.author %} · {{ item.author.get_full_name|default:item.author.username }}{% endif %}</span></header>{% if item.cover_image %}<figure><img src="{{ item.cover_image.url }}" alt="Cover photo for {{ item.title }}"></figure>{% endif %}<div class="publication-body">{{ item.body|linebreaks }}</div>{% if item.source_url %}<aside class="publication-source"><strong>Original source</strong><p>This update was linked from an official public Facebook post.</p><a href="{{ item.source_url }}" target="_blank" rel="noopener noreferrer">View original post on Facebook <span aria-hidden="true">↗</span></a></aside>{% endif %}</article>
+{% endblock %}
