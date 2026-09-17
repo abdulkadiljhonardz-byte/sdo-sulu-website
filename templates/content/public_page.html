@@ -5,10 +5,10 @@
   <header>
     <p>Schools Division Office of Sulu</p>
     <h1>{{ page.title }}</h1>
-    {% if page.summary %}<span>{{ page.summary }}</span>{% endif %}
+    {% if page.summary and page.slug != 'citizens-charter' %}<span>{{ page.summary }}</span>{% endif %}
   </header>
   {% if page.image %}<img src="{{ page.image.url }}" alt="{{ page.title }}">{% endif %}
-  <div class="public-page-body">{{ page.body|linebreaks }}</div>
+  {% if page.slug != 'citizens-charter' %}<div class="public-page-body">{{ page.body|linebreaks }}</div>{% endif %}
   {% if page.slug == 'citizens-charter' and page.document %}
   <section class="charter-document" aria-labelledby="charter-document-title">
     <header><div><p>Official reference document</p><h2 id="charter-document-title">DepEd Citizens’ Charter 2026 Edition</h2><span>View the complete official charter below or open it in a new tab.</span></div><a href="{{ page.document.url }}" target="_blank" rel="noopener noreferrer">Open PDF <span aria-hidden="true">↗</span></a></header>
