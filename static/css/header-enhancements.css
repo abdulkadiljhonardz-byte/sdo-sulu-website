@@ -61,7 +61,7 @@
 }
 
 .main-nav {
-  border-bottom-width: 3px;
+  border-bottom: 1px solid #dce8e2;
   box-shadow: 0 8px 24px rgba(3, 46, 37, 0.09);
 }
 
