@@ -641,3 +641,30 @@
   .hero-sidebar .hero-events { animation: none; }
   .hero-featured-advisory { animation: none; }
 }
+
+/* Keep the actual SDO office and the Sulu map visible behind the compact
+   mobile dashboard instead of flattening the masthead to a solid green. */
+@media (max-width: 700px) {
+  .home-masthead {
+    min-height: 500px;
+    background: #064833;
+  }
+
+  .masthead-office {
+    object-position: 65% center;
+    opacity: .94;
+  }
+
+  .masthead-lines {
+    background:
+      linear-gradient(90deg, rgba(2, 47, 34, .9) 0%, rgba(4, 77, 49, .7) 48%, rgba(3, 57, 39, .22) 100%),
+      linear-gradient(0deg, rgba(1, 31, 23, .38), transparent 54%);
+  }
+
+  .masthead-map {
+    inset: 11% auto auto -7%;
+    width: 90%;
+    height: 70%;
+    opacity: .24;
+  }
+}
