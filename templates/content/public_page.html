@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base.html' %}{% load static %}
 {% block title %}{{ page.title }} — SDO Sulu{% endblock %}
 {% block content %}
 <article class="public-information-page{% if page.slug == 'citizens-charter' %} public-information-page--charter{% endif %}">
@@ -9,6 +9,12 @@
   </header>
   {% if page.image %}<img src="{{ page.image.url }}" alt="{{ page.title }}">{% endif %}
   {% if page.slug != 'citizens-charter' %}<div class="public-page-body">{{ page.body|linebreaks }}</div>{% endif %}
+  {% if page.slug == 'about' %}
+  <section class="about-government-marks" aria-label="Government marks">
+    <p>In support of national education and public service</p>
+    <div><img src="{% static 'deped-logo.png' %}" alt="Department of Education"><img src="{% static 'bagong-pilipinas-logo.png' %}" alt="Bagong Pilipinas"></div>
+  </section>
+  {% endif %}
   {% if page.slug == 'citizens-charter' and page.document %}
   <section class="charter-document" aria-labelledby="charter-document-title">
     <header><div><p>Official reference document</p><h2 id="charter-document-title">DepEd Citizens’ Charter 2026 Edition</h2><span>View the complete official charter below.</span></div></header>

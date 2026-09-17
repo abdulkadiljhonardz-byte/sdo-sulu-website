@@ -336,6 +336,29 @@ textarea:focus-visible {
   color: #9fbbb0;
 }
 
+.footer-marks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.footer-marks img {
+  display: block;
+  max-width: 128px;
+  height: 40px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.footer-marks img:last-child {
+  width: 39px;
+  max-width: 39px;
+  height: 46px;
+}
+
 .footer-grid {
   grid-template-columns: 1.45fr 1.35fr .8fr .9fr;
   gap: 34px;
@@ -438,5 +461,9 @@ textarea:focus-visible {
 
   .footer-contact address {
     grid-template-columns: 1fr;
+  }
+
+  .footer-marks {
+    margin-top: 14px;
   }
 }
