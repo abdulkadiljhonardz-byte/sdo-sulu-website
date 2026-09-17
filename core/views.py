@@ -35,6 +35,13 @@ def public_media(request, path):
     )
     response["Cache-Control"] = "public, max-age=86400"
     response["X-Content-Type-Options"] = "nosniff"
+    # Public PDFs may be displayed only by this portal's own document viewer.
+    # Other pages retain the stricter global DENY anti-clickjacking policy.
+    if content_type == "application/pdf":
+        response["X-Frame-Options"] = "SAMEORIGIN"
+        response["Content-Security-Policy"] = (
+            "default-src 'none'; frame-ancestors 'self'; base-uri 'none'"
+        )
     return response
 
 
