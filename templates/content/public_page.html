@@ -11,7 +11,7 @@
   {% if page.slug != 'citizens-charter' %}<div class="public-page-body">{{ page.body|linebreaks }}</div>{% endif %}
   {% if page.slug == 'citizens-charter' and page.document %}
   <section class="charter-document" aria-labelledby="charter-document-title">
-    <header><div><p>Official reference document</p><h2 id="charter-document-title">DepEd Citizens’ Charter 2026 Edition</h2><span>View the complete official charter below or open it in a new tab.</span></div><a href="{{ page.document.url }}" target="_blank" rel="noopener noreferrer">Open PDF <span aria-hidden="true">↗</span></a></header>
+    <header><div><p>Official reference document</p><h2 id="charter-document-title">DepEd Citizens’ Charter 2026 Edition</h2><span>View the complete official charter below.</span></div></header>
     <iframe src="{{ page.document.url }}#view=FitH" title="DepEd Citizens’ Charter 2026 Edition PDF"><a href="{{ page.document.url }}" target="_blank" rel="noopener noreferrer">Open the DepEd Citizens’ Charter 2026 Edition PDF.</a></iframe>
   </section>
   {% endif %}
