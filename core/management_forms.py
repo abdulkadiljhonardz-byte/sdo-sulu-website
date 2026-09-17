@@ -270,12 +270,18 @@ class PublicPageManagementForm(StyledModelForm):
     }
     class Meta:
         model = PublicPage
-        fields = ("slug", "title", "summary", "body", "image", "published")
+        fields = ("slug", "title", "summary", "body", "image", "document", "published")
 
     def clean_image(self):
         upload = self.cleaned_data.get("image")
         if upload and not getattr(upload, "_committed", False):
             validate_secure_image_upload(upload)
+        return upload
+
+    def clean_document(self):
+        upload = self.cleaned_data.get("document")
+        if upload and not getattr(upload, "_committed", False):
+            validate_secure_upload(upload)
         return upload
 
     def clean_slug(self):

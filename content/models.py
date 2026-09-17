@@ -61,6 +61,7 @@ class PublicPage(TimeStampedModel):
     summary = models.TextField(blank=True)
     body = models.TextField()
     image = models.ImageField(upload_to=public_upload, blank=True)
+    document = models.FileField(upload_to=public_upload, blank=True)
     published = models.BooleanField(default=True)
 
     class Meta:

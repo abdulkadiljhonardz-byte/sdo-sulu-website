@@ -4,7 +4,7 @@ import shutil
 from django.conf import settings
 from django.core.management import BaseCommand, call_command
 
-from content.models import News
+from content.models import News, PublicPage
 from issuances.models import Issuance
 
 
@@ -38,5 +38,12 @@ class Command(BaseCommand):
             if not destination.exists():
                 shutil.copy2(source, destination)
                 copied += 1
+
+        charter = PublicPage.objects.filter(slug="citizens-charter").first()
+        charter_file = "public/DepEd-Citizens-Charter-2026-Edition.pdf"
+        if charter and not charter.document:
+            charter.document = charter_file
+            charter.save(update_fields=["document", "updated_at"])
+            self.stdout.write(self.style.SUCCESS("Linked the 2026 Citizens Charter."))
 
         self.stdout.write(f"Restored {copied} missing public media file(s).")
