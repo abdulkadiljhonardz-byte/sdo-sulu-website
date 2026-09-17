@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% block title %}{{ page.title }} — SDO Sulu{% endblock %}
 {% block content %}
-<article class="public-information-page">
+<article class="public-information-page{% if page.slug == 'citizens-charter' %} public-information-page--charter{% endif %}">
   <header>
     <p>Schools Division Office of Sulu</p>
     <h1>{{ page.title }}</h1>
