@@ -71,6 +71,15 @@ def _integer(value, field, row_number, errors, required=False):
         return None
 
 
+def _text(value):
+    """Normalize spreadsheet values without turning numeric School IDs into 123.0."""
+    if value is None:
+        return ""
+    if isinstance(value, float) and value.is_integer():
+        return str(int(value))
+    return str(value).strip()
+
+
 def _date(value, field, row_number, errors):
     if isinstance(value, datetime):
         return value.date()
@@ -86,47 +95,74 @@ def _date(value, field, row_number, errors):
 @transaction.atomic
 def import_schools(upload):
     rows = read_rows(upload)
-    _required_headers(rows, {"school_id", "name", "district", "classification", "municipality"})
-    errors, objects, seen = [], [], set()
+    _required_headers(rows, {"school_id", "district", "municipality"})
+    errors, prepared, seen = [], [], set()
     districts = {item.name.lower(): item for item in District.objects.filter(active=True)}
-    existing = {value.lower() for value in School.objects.values_list("school_id", flat=True)}
+    existing = {item.school_id.lower(): item for item in School.objects.all()}
     for number, row in enumerate(rows, 2):
-        school_id = str(row.get("school_id") or "").strip()
-        name = str(row.get("name") or "").strip()
-        district_name = str(row.get("district") or "").strip()
-        classification = str(row.get("classification") or "").strip().upper()
+        school_id = _text(row.get("school_id"))
+        current = existing.get(school_id.lower())
+        name = _text(row.get("name")) or (current.name if current else "")
+        district_name = _text(row.get("district"))
+        classification = _text(row.get("classification")).upper() or (current.classification if current else "")
+        municipality = _text(row.get("municipality"))
         if not school_id or not name:
-            errors.append(f"Row {number}: school_id and name are required.")
-        if school_id.lower() in existing or school_id.lower() in seen:
+            errors.append(f"Row {number}: school_id and name are required for new records.")
+        if school_id.lower() in seen:
             errors.append(f"Row {number}: duplicate school ID {school_id}.")
         district = districts.get(district_name.lower())
         if not district:
             errors.append(f"Row {number}: unknown or inactive district {district_name}.")
         if classification not in {"PUBLIC", "PRIVATE"}:
             errors.append(f"Row {number}: classification must be PUBLIC or PRIVATE.")
+        if not municipality:
+            errors.append(f"Row {number}: municipality is required.")
         seen.add(school_id.lower())
-        objects.append(School(
+        def keep_or_row(field):
+            value = _text(row.get(field))
+            return value if value else getattr(current, field, "")
+
+        student_population = _integer(row.get("student_population"), "student_population", number, errors)
+        teacher_population = _integer(row.get("teacher_population"), "teacher_population", number, errors)
+        candidate = School(
             school_id=school_id, name=name, district=district,
-            classification=classification, municipality=str(row.get("municipality") or "").strip(),
-            school_type=str(row.get("school_type") or "").strip(), level=str(row.get("level") or "").strip(),
-            school_head=str(row.get("school_head") or "").strip(), address=str(row.get("address") or "").strip(),
-            barangay=str(row.get("barangay") or "").strip(), contact_number=str(row.get("contact_number") or "").strip(),
-            email=str(row.get("email") or "").strip(), latitude=row.get("latitude") or None,
-            longitude=row.get("longitude") or None, status=str(row.get("status") or "ACTIVE").strip().upper(),
-            student_population=_integer(row.get("student_population"), "student_population", number, errors),
-            teacher_population=_integer(row.get("teacher_population"), "teacher_population", number, errors),
-        ))
+            classification=classification, municipality=municipality,
+            school_type=keep_or_row("school_type"), level=keep_or_row("level"),
+            school_head=keep_or_row("school_head"), address=keep_or_row("address"),
+            barangay=keep_or_row("barangay"), contact_number=keep_or_row("contact_number"),
+            email=keep_or_row("email"), latitude=row.get("latitude") or getattr(current, "latitude", None),
+            longitude=row.get("longitude") or getattr(current, "longitude", None),
+            status=_text(row.get("status")).upper() or getattr(current, "status", "ACTIVE"),
+            student_population=student_population if student_population is not None else getattr(current, "student_population", None),
+            teacher_population=teacher_population if teacher_population is not None else getattr(current, "teacher_population", None),
+        )
+        prepared.append((current, candidate))
     if errors:
         raise ImportValidationError(errors)
-    for item in objects:
+    for _, item in prepared:
         try:
             item.full_clean(validate_unique=False)
         except ValidationError as exc:
             errors.extend(f"{item.school_id}: {message}" for messages in exc.message_dict.values() for message in messages)
     if errors:
         raise ImportValidationError(errors)
-    School.objects.bulk_create(objects)
-    return len(objects)
+    created = updated = 0
+    editable_fields = ("name", "district", "classification", "municipality", "school_type", "level", "school_head", "address", "barangay", "contact_number", "email", "latitude", "longitude", "status", "student_population", "teacher_population")
+    for current, candidate in prepared:
+        if current is None:
+            candidate.save()
+            created += 1
+            continue
+        changed = []
+        for field in editable_fields:
+            value = getattr(candidate, field)
+            if getattr(current, field) != value:
+                setattr(current, field, value)
+                changed.append(field)
+        if changed:
+            current.save(update_fields=[*changed, "updated_at"])
+            updated += 1
+    return {"created": created, "updated": updated}
 
 
 @transaction.atomic

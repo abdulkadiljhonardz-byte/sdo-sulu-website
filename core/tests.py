@@ -599,6 +599,32 @@ class ContentManagementTests(TestCase):
         self.assertEqual(pdf_response.status_code, 200)
         self.assertTrue(pdf_response.content.startswith(b"%PDF-1.4"))
 
+    def test_school_mapping_import_updates_existing_school_by_id(self):
+        district = District.objects.create(name="Mapped District", municipality="Jolo")
+        school = School.objects.create(
+            school_id="123456",
+            name="Existing Sulu School",
+            classification="PUBLIC",
+        )
+        admin = User.objects.create_user(
+            "mappingadmin", password="StrongPass!234", role=Role.ADMIN, is_staff=True
+        )
+        self.client.force_login(admin)
+        csv_file = SimpleUploadedFile(
+            "school-mapping.csv",
+            b"school_id,district,municipality\n123456,Mapped District,Jolo\n",
+            content_type="text/csv",
+        )
+        response = self.client.post(
+            reverse("core:data_workspace"),
+            {"dataset": "schools", "spreadsheet": csv_file},
+        )
+        self.assertRedirects(response, reverse("core:data_workspace"))
+        school.refresh_from_db()
+        self.assertEqual(school.district, district)
+        self.assertEqual(school.municipality, "Jolo")
+        self.assertEqual(School.objects.filter(school_id="123456").count(), 1)
+
     def test_health_endpoint_checks_database(self):
         response = self.client.get(reverse("core:health"))
         self.assertEqual(response.status_code, 200)

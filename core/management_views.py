@@ -385,8 +385,15 @@ def data_workspace(request):
         except ImportValidationError as exc:
             import_errors = exc.errors
         else:
-            record_action(request, "Bulk data imported", current={"dataset": form.cleaned_data["dataset"], "rows": imported})
-            messages.success(request, f"Successfully imported {imported} {form.cleaned_data['dataset']} records.")
+            if form.cleaned_data["dataset"] == "schools":
+                record_action(request, "School directory bulk updated", current=imported)
+                messages.success(
+                    request,
+                    f"School directory updated: {imported['created']} created, {imported['updated']} updated.",
+                )
+            else:
+                record_action(request, "Bulk data imported", current={"dataset": form.cleaned_data["dataset"], "rows": imported})
+                messages.success(request, f"Successfully imported {imported} {form.cleaned_data['dataset']} records.")
             return redirect("core:data_workspace")
     return render(request, "management/data_workspace.html", {"form": form, "import_errors": import_errors})
 
@@ -399,11 +406,23 @@ def import_template(request, dataset, file_format):
     }
     if dataset not in templates or file_format not in {"csv", "xlsx"}:
         raise PermissionDenied
+    rows = []
+    if dataset == "schools":
+        rows = [
+            [
+                item.school_id, item.name, item.district.name if item.district else "",
+                item.classification, item.municipality, item.school_type, item.level,
+                item.school_head, item.address, item.barangay, item.contact_number,
+                item.email, item.latitude, item.longitude, item.status,
+                item.student_population, item.teacher_population,
+            ]
+            for item in School.objects.select_related("district").order_by("name")
+        ]
     if file_format == "xlsx":
-        payload = write_xlsx(templates[dataset], [])
+        payload = write_xlsx(templates[dataset], rows)
         content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     else:
-        payload = write_csv(templates[dataset], [])
+        payload = write_csv(templates[dataset], rows)
         content_type = "text/csv; charset=utf-8"
     response = HttpResponse(payload, content_type=content_type)
     response["Content-Disposition"] = f'attachment; filename="{dataset}-import-template.{file_format}"'
