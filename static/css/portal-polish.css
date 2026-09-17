@@ -303,7 +303,32 @@ textarea:focus-visible {
 
 .site-footer {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   padding-top: 48px;
+}
+
+/* A quiet continuation of the Sulu map used on the home page. */
+.site-footer::before {
+  position: absolute;
+  z-index: -1;
+  inset: auto auto -92px -52px;
+  width: min(43vw, 570px);
+  aspect-ratio: 1 / 1;
+  content: "";
+  background: url("../map.png") left bottom / contain no-repeat;
+  opacity: .13;
+  filter: grayscale(1) brightness(2.4) contrast(.75);
+  pointer-events: none;
+}
+
+.site-footer::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background: linear-gradient(90deg, rgba(2, 55, 40, .45), transparent 62%);
+  pointer-events: none;
 }
 
 .footer-accent {
@@ -360,6 +385,8 @@ textarea:focus-visible {
 }
 
 .footer-grid {
+  position: relative;
+  z-index: 1;
   grid-template-columns: 1.45fr 1.35fr .8fr .9fr;
   gap: 34px;
 }
@@ -400,6 +427,8 @@ textarea:focus-visible {
 }
 
 .footer-bottom {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -449,6 +478,12 @@ textarea:focus-visible {
 }
 
 @media (max-width: 700px) {
+  .site-footer::before {
+    inset: auto auto -36px -66px;
+    width: 390px;
+    opacity: .1;
+  }
+
   .footer-bottom {
     display: grid;
     gap: 5px;
