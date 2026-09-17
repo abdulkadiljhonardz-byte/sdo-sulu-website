@@ -78,8 +78,6 @@
           <div class="nav-trigger-row"><a class="nav-dropdown-trigger" href="{% url 'issuances:list' %}" aria-haspopup="true">Issuances <span aria-hidden="true">▾</span></a><button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="issuances-submenu"><span class="sr-only">Show Issuances submenu</span><i aria-hidden="true"></i></button></div>
           <div id="issuances-submenu" class="nav-dropdown-menu" aria-label="Issuance categories">
             <a href="{% url 'issuances:list' %}?category=DIVISION_MEMO"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Division Memo</span></a>
-            <a href="{% url 'issuances:list' %}?category=OFFICE_MEMO"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Office Memo</span></a>
-            <a href="{% url 'issuances:list' %}?category=UNNUMBERED_MEMO"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Unnumbered Memo</span></a>
             <a href="{% url 'issuances:list' %}?category=DIVISION_ADVISORY"><svg aria-hidden="true"><use href="#icon-message"/></svg><span>Division Advisory</span></a>
             <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-orders/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-external"/></svg><span>DepEd Order</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
             <a class="external-link" href="https://www.deped.gov.ph/category/issuances/deped-memoranda/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-external"/></svg><span>DepEd Memoranda</span><span class="sr-only">(opens the official DepEd website in a new tab)</span></a>
