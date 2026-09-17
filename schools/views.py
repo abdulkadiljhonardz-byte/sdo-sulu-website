@@ -34,9 +34,7 @@ def directory(request):
     )
     total_target = districts.aggregate(target=Sum("public_school_target"))["target"] or 0
     listed_public_schools = School.objects.filter(
-        district__active=True,
-        classification="PUBLIC",
-        status="ACTIVE",
+        classification="PUBLIC", status="ACTIVE"
     ).count()
     page = Paginator(schools.order_by("name"), 20).get_page(request.GET.get("page"))
     return render(

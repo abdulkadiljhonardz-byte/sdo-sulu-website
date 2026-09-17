@@ -43,7 +43,7 @@
     {% for school in schools %}
     <a href="{% url 'schools:detail' school.pk %}">
       <span class="school-result-icon"><svg aria-hidden="true"><use href="#icon-school"/></svg></span>
-      <span><small>{{ school.school_id }} · {{ school.get_classification_display }}</small><strong>{{ school.name }}</strong><em>{{ school.district.name }}{% if school.municipality %} · {{ school.municipality }}{% endif %}</em></span>
+      <span><small>{{ school.school_id }} · {{ school.get_classification_display }}</small><strong>{{ school.name }}</strong><em>{% if school.district %}{{ school.district.name }}{% else %}District pending validation{% endif %}{% if school.municipality %} · {{ school.municipality }}{% endif %}</em></span>
       <b>View profile <svg aria-hidden="true"><use href="#icon-arrow"/></svg></b>
     </a>
     {% empty %}

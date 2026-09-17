@@ -3,6 +3,7 @@ set -eu
 
 python manage.py migrate --noinput
 python manage.py seed_public_content
+python manage.py seed_nid_sulu_schools
 python manage.py create_admin
 python manage.py collectstatic --noinput
 
@@ -15,4 +16,3 @@ exec gunicorn config.wsgi:application \
   --max-requests-jitter 100 \
   --access-logfile - \
   --error-logfile -
-

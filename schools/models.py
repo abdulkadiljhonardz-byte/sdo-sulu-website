@@ -4,7 +4,13 @@ from offices.models import District, TimeStampedModel
 class School(TimeStampedModel):
     school_id = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=255)
-    district = models.ForeignKey(District, on_delete=models.PROTECT, related_name="schools")
+    district = models.ForeignKey(
+        District,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="schools",
+    )
     school_type = models.CharField(max_length=80, blank=True)
     level = models.CharField(max_length=80, blank=True)
     classification = models.CharField(max_length=20, choices=[("PUBLIC", "Public"), ("PRIVATE", "Private")])
