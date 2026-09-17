@@ -1,7 +1,11 @@
+import mimetypes
+from pathlib import PurePosixPath
+
+from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db import connection
-from django.http import JsonResponse
+from django.http import FileResponse, Http404, JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
 from django.utils import timezone
@@ -12,6 +16,26 @@ from issuances.models import Issuance
 from vacancies.models import Vacancy
 from .analytics import record_event
 from .models import AnalyticsEvent
+
+
+def public_media(request, path):
+    """Serve only explicitly public uploads when no reverse proxy serves media."""
+    relative_path = PurePosixPath(path)
+    if relative_path.is_absolute() or ".." in relative_path.parts:
+        raise Http404
+
+    storage_path = str(PurePosixPath("public") / relative_path)
+    if not default_storage.exists(storage_path):
+        raise Http404
+
+    content_type, _ = mimetypes.guess_type(storage_path)
+    response = FileResponse(
+        default_storage.open(storage_path, "rb"),
+        content_type=content_type or "application/octet-stream",
+    )
+    response["Cache-Control"] = "public, max-age=86400"
+    response["X-Content-Type-Options"] = "nosniff"
+    return response
 
 
 def _active_window(queryset, publish_field, expiry_field="expires_at"):

@@ -1,0 +1,140 @@
+[
+{
+  "model": "content.news",
+  "pk": 5,
+  "fields": {
+    "created_at": "2026-09-16T17:08:22.556Z",
+    "updated_at": "2026-09-16T17:08:22.556Z",
+    "title": "Wellness Break for Teachers on September 14-15, 2026",
+    "slug": "wellness-break-for-teachers-on-september-14-1",
+    "body": "Wellness break para sa ating mga teachers, susunod na Lunes at Martes, September 14-15, 2026! #TeacherWelfare #TeacherIkawNaman #WellnessBreak #walangpasok #DepEdPhilippines",
+    "category": "Facebook News",
+    "cover_image": "public/f2f901a45f944dfdab8a01b8d81e2842.jpg",
+    "source_url": "https://www.facebook.com/sonnyangara/posts/pfbid02fCBS5hWh16fRerGBpSAB9ZKk7rGc7sWbYsfLvv8xmRdd13MpMhjDJGEafSZRGd2ql",
+    "source_imported_at": "2026-09-16T17:08:22.554Z",
+    "office": null,
+    "author": null,
+    "published_at": "2026-09-16T17:08:22.554Z",
+    "expires_at": null,
+    "is_published": true,
+    "is_featured": false,
+    "archived": false,
+    "facebook_post_id": "pfbid02fCBS5hWh16fRerGBpSAB9ZKk7rGc7sWbYsfLvv8xmRdd13MpMhjDJGEafSZRGd2ql"
+  }
+},
+{
+  "model": "content.news",
+  "pk": 6,
+  "fields": {
+    "created_at": "2026-09-16T17:08:26.088Z",
+    "updated_at": "2026-09-16T17:08:26.088Z",
+    "title": "DepEd-Sulu Umaasa na Magiging Makabuluhan ang Wellness Break ng mga Pampublikong Paaralan",
+    "slug": "deped-sulu-umaasa-na-magiging-makabuluhan-ang",
+    "body": "DEPED-SULU UMAAASA NA MAGIGING MAKABULUHAN ANG WELLNESS BREAK NGAYON NG MGA PAMPUBLIKONG PAARALAN\n\nUmaasa ang pamunuan ng Department of Education (DepEd), Sulu Schools Division Office na gagamitin ng mga eskwelahan ang wellness break ngayon sa pagpapatupad ng mga mahalagang aktibidad na hindi nagawa sa panahon ng 1st instructional block sa ilalim ng bagong Matatag Curriculum ng Kagawaran ng Edukasyon.\n\nTatagal ito ayon kay Dolores Gonzalo, assistant schools division superintendent for elementary at officer in-charge ng DepEd Sulu sa loob ng 15 araw mula Setyembre 1-15, 2026. Habang, sa Setyembre 16 naman kung may pasok dahil pagdiriwang ng Bangsa Sug Day magsisimula ang 2nd term ng instructional block hanggang sa ika-7 ng Disyembre. | ulat ni John Aranan, RP1 Jolo\n\nBasahin ang buong ulat sa comment section.\n\n#RadyoPilipinasJolo #RadyoPubliko #IntegratedStateMedia #ISM",
+    "category": "Facebook News",
+    "cover_image": "public/f0fc692bed1c463483ff194d2df7a67b.jpg",
+    "source_url": "https://www.facebook.com/rpjolo/posts/pfbid0mS71boF4tVSvLV3Ypw5aW77ukR62z9QAJthsBrWnhF34roUW5EXVVHwTBfWB7gmMl",
+    "source_imported_at": "2026-09-16T17:08:26.087Z",
+    "office": null,
+    "author": null,
+    "published_at": "2026-09-16T17:08:26.087Z",
+    "expires_at": null,
+    "is_published": true,
+    "is_featured": false,
+    "archived": false,
+    "facebook_post_id": "pfbid0mS71boF4tVSvLV3Ypw5aW77ukR62z9QAJthsBrWnhF34roUW5EXVVHwTBfWB7gmMl"
+  }
+},
+{
+  "model": "content.news",
+  "pk": 7,
+  "fields": {
+    "created_at": "2026-09-16T17:19:52.067Z",
+    "updated_at": "2026-09-16T17:19:52.067Z",
+    "title": "Advisory - List of Participants for the Sulu Division Training-Workshop",
+    "slug": "advisory-list-of-participants-for-the-sulu-di",
+    "body": "ADVISORY LIST OF PARTICIPANTS FOR THE SULU DIVISION TRAINING-WORKSHOP (SCHEDULE OF TRAINING TO BE FOLLOWED)",
+    "category": "Advisory",
+    "cover_image": "public/54f317679e9d4d379fe725ce175c449e.jpg",
+    "source_url": "https://www.facebook.com/100042494841401/posts/advisory-list-of-participants-for-the-sulu-division-training-workshopschedule-of/1794695485290262/",
+    "source_imported_at": "2026-09-16T17:19:52.065Z",
+    "office": null,
+    "author": null,
+    "published_at": "2026-03-04T04:00:00Z",
+    "expires_at": null,
+    "is_published": true,
+    "is_featured": false,
+    "archived": false,
+    "facebook_post_id": "1794695485290262"
+  }
+},
+{
+  "model": "content.news",
+  "pk": 8,
+  "fields": {
+    "created_at": "2026-09-16T17:19:53.659Z",
+    "updated_at": "2026-09-16T17:19:53.659Z",
+    "title": "Message from the Regional Director - End-of-School-Year Rites",
+    "slug": "message-from-the-regional-director-end-of-sch",
+    "body": "MESSAGE FROM THE REGIONAL DIRECTOR END-OF-SCHOOL-YEAR RITES",
+    "category": "Division News",
+    "cover_image": "public/1d4d697e1fd940aaaec39c4280024d28.jpg",
+    "source_url": "https://www.facebook.com/100042494841401/posts/message-from-the-regional-director-end-of-school-year-rites/1800545571371920/",
+    "source_imported_at": "2026-09-16T17:19:53.659Z",
+    "office": null,
+    "author": null,
+    "published_at": "2026-03-11T04:00:00Z",
+    "expires_at": null,
+    "is_published": true,
+    "is_featured": false,
+    "archived": false,
+    "facebook_post_id": "1800545571371920"
+  }
+},
+{
+  "model": "content.news",
+  "pk": 9,
+  "fields": {
+    "created_at": "2026-09-16T17:19:55.139Z",
+    "updated_at": "2026-09-16T17:19:55.139Z",
+    "title": "Advisory",
+    "slug": "advisory",
+    "body": "ADVISORY",
+    "category": "Advisory",
+    "cover_image": "public/bf0bcedd862b4a21ae069ee3f5af879c.jpg",
+    "source_url": "https://www.facebook.com/100042494841401/posts/advisory/1857582962334847/",
+    "source_imported_at": "2026-09-16T17:19:55.138Z",
+    "office": null,
+    "author": null,
+    "published_at": null,
+    "expires_at": null,
+    "is_published": true,
+    "is_featured": false,
+    "archived": false,
+    "facebook_post_id": "1857582962334847"
+  }
+},
+{
+  "model": "content.news",
+  "pk": 10,
+  "fields": {
+    "created_at": "2026-09-16T17:19:56.679Z",
+    "updated_at": "2026-09-16T17:19:56.679Z",
+    "title": "Microsoft Teams Online Meeting",
+    "slug": "microsoft-teams-online-meeting",
+    "body": "https://teams.microsoft.com/meet/43964708483523?p=OIMlcOCW1ScwXB8SjK",
+    "category": "Division Update",
+    "cover_image": "public/ad00574970d745b482d43c01ead30f4a.jpg",
+    "source_url": "https://www.facebook.com/100042494841401/posts/7215ee9c/1913846646708478/",
+    "source_imported_at": "2026-09-16T17:19:56.679Z",
+    "office": null,
+    "author": null,
+    "published_at": "2026-07-12T04:00:00Z",
+    "expires_at": null,
+    "is_published": true,
+    "is_featured": false,
+    "archived": false,
+    "facebook_post_id": "1913846646708478"
+  }
+}
+]

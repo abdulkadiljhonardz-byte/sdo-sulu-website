@@ -2,8 +2,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from core.views import public_media
 
 urlpatterns = [
+    path("media/public/<path:path>", public_media, name="public_media"),
     path("secure-admin/", admin.site.urls),
     path("", include("core.urls")),
     path("account/", include("accounts.urls")),
