@@ -7,25 +7,31 @@
 
 <section class="home-masthead">
   <img class="masthead-office" src="{% static 'sdooffice.png' %}?v=20260917.6" alt="" aria-hidden="true">
-  <img class="masthead-map" src="{% static 'map.png' %}?v=20260917.6" alt="" aria-hidden="true">
   <div class="masthead-lines" aria-hidden="true"></div>
-  <div class="site-shell reference-hero-inner">
-    <div class="hero-dashboard">
-      <aside class="hero-sidebar">
-        {% if featured_advisory %}
-        <article class="hero-featured-advisory">
-          <p><span>Featured advisory</span><b>{{ featured_advisory.kind }}</b></p>
-          <h1>{{ featured_advisory.title|truncatechars:90 }}</h1>
-          <time datetime="{{ featured_advisory.published_date|date:'Y-m-d' }}"><svg aria-hidden="true"><use href="#icon-calendar"/></svg> Published {{ featured_advisory.published_date|date:"F d, Y" }}</time>
-          <a href="{{ featured_advisory.url }}">View Advisory <svg aria-hidden="true"><use href="#icon-arrow"/></svg></a>
-        </article>
-        {% endif %}
-        <div class="hero-events">
-          <div class="hero-events-title"><span><i><svg aria-hidden="true"><use href="#icon-calendar"/></svg></i> Upcoming events</span><a href="{% url 'events:list' %}">View calendar <svg aria-hidden="true"><use href="#icon-arrow"/></svg></a></div>
-          <div class="hero-event-list">{% for event in events %}<a href="{% url 'events:list' %}"><time datetime="{{ event.start|date:'c' }}"><strong>{{ event.start|date:"d" }}</strong><span>{{ event.start|date:"M" }}</span></time><span><strong>{{ event.title }}</strong><small>{{ event.location|default:"SDO Sulu" }}</small></span><b>Details</b></a>{% empty %}<div class="hero-events-empty"><span><svg aria-hidden="true"><use href="#icon-calendar"/></svg></span><div><strong>No upcoming events yet</strong><p>New division activities will be listed here as soon as they are published.</p></div></div>{% endfor %}</div>
-        </div>
-      </aside>
+  <div class="site-shell portal-hero">
+    <div class="portal-hero-copy">
+      <p class="portal-kicker">Schools Division Office of Sulu</p>
+      <h1>Public information, closer to every school community.</h1>
+      <p>Official notices, division issuances, school information, and services in one reliable place.</p>
+      <div class="portal-hero-actions">
+        <a class="portal-button portal-button-primary" href="{% url 'issuances:list' %}">Browse issuances <svg aria-hidden="true"><use href="#icon-arrow"/></svg></a>
+        <a class="portal-button portal-button-secondary" href="{% url 'schools:directory' %}">Find a school</a>
+      </div>
     </div>
+    <aside class="hero-sidebar">
+      {% if featured_advisory %}
+      <article class="hero-featured-advisory">
+        <p><span>Featured update</span><b>{{ featured_advisory.kind }}</b></p>
+        <h2>{{ featured_advisory.title|truncatechars:90 }}</h2>
+        <time datetime="{{ featured_advisory.published_date|date:'Y-m-d' }}"><svg aria-hidden="true"><use href="#icon-calendar"/></svg> Published {{ featured_advisory.published_date|date:"F d, Y" }}</time>
+        <a href="{{ featured_advisory.url }}">View Advisory <svg aria-hidden="true"><use href="#icon-arrow"/></svg></a>
+      </article>
+      {% endif %}
+      <div class="hero-events">
+        <div class="hero-events-title"><span><i><svg aria-hidden="true"><use href="#icon-calendar"/></svg></i> Upcoming events</span><a href="{% url 'events:list' %}">View calendar <svg aria-hidden="true"><use href="#icon-arrow"/></svg></a></div>
+        <div class="hero-event-list">{% for event in events %}<a href="{% url 'events:list' %}"><time datetime="{{ event.start|date:'c' }}"><strong>{{ event.start|date:"d" }}</strong><span>{{ event.start|date:"M" }}</span></time><span><strong>{{ event.title }}</strong><small>{{ event.location|default:"SDO Sulu" }}</small></span><b>Details</b></a>{% empty %}<div class="hero-events-empty"><span><svg aria-hidden="true"><use href="#icon-calendar"/></svg></span><div><strong>No upcoming events yet</strong><p>New division activities will be listed here as soon as they are published.</p></div></div>{% endfor %}</div>
+      </div>
+    </aside>
   </div>
 </section>
 

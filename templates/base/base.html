@@ -43,23 +43,9 @@
   <link rel="stylesheet" href="{% static 'css/home-enhancements.css' %}?v=20260917.5">
   <link rel="stylesheet" href="{% static 'css/mobile-nav.css' %}?v=20260917.5">
   <link rel="stylesheet" href="{% static 'css/header-enhancements.css' %}?v=20260917.1">
+  <link rel="stylesheet" href="{% static 'css/human-design.css' %}?v=20260919.1">
 </head>
 <body>
-  {% if request.resolver_match.namespace == 'core' and request.resolver_match.url_name == 'home' %}
-  <div class="site-loader" id="site-loader" role="status" aria-live="polite" aria-label="Loading SDO Sulu portal">
-    <div class="loader-content">
-      <div class="loader-emblem" aria-hidden="true">
-        <span class="loader-ring loader-ring-one"></span>
-        <span class="loader-ring loader-ring-two"></span>
-        <img src="{% static 'logosdo.jpeg' %}" alt="" width="104" height="104">
-      </div>
-      <strong>SULU</strong>
-      <span class="loader-caption">Official Digital Information Portal</span>
-      <span class="loader-progress" aria-hidden="true"><i></i></span>
-      <span class="sr-only">Loading, please wait.</span>
-    </div>
-  </div>
-  {% endif %}
   <a href="#main" class="skip-link">Skip to content</a>
   <header>
     <div class="utility-bar"><div class="site-shell utility-inner">
@@ -120,7 +106,5 @@
     <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-13A7 7 0 1 0 5 8c0 6.8 7 13 7 13Zm0-10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></symbol><symbol id="icon-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm2 2v1l7 5 7-5V7H5Zm14 10v-6l-7 5-7-5v6h14Z"/></symbol><symbol id="icon-phone" viewBox="0 0 24 24"><path d="M6.6 2 10 7 7.8 9.2c1.5 3 3.9 5.4 6.9 6.9l2.2-2.2 5 3.4-.8 4c-.2 1-1.1 1.7-2.1 1.7C9.1 23 1 14.9 1 5c0-1 .7-1.9 1.7-2.1L6.6 2Z"/></symbol><symbol id="icon-message" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-7.7 13.7L3 21l5.5-1.3A9 9 0 1 0 12 2Zm0 2a7 7 0 1 1-2.9 13.4l-.3-.1-3 .7.7-2.9-.2-.3A7 7 0 0 1 12 4Zm-3 3.4c-.4 0-.8.4-.9.9-.2 1.1.5 2.6 1.8 3.9 1.3 1.3 3.2 2.4 4.6 2 .6-.2 1.1-.8 1.1-1.3 0-.3-1.6-1-1.9-1-.2 0-.5.6-.7.8-.1.1-.3.1-.5 0-1-.4-2-1.3-2.4-2.3-.1-.2-.1-.3 0-.5.2-.2.6-.5.6-.7 0-.3-.8-1.8-1.1-1.8H9Z"/></symbol><symbol id="icon-search" viewBox="0 0 24 24"><path d="m20 18.6-4.5-4.5a7 7 0 1 0-1.4 1.4l4.5 4.5 1.4-1.4ZM5 10a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"/></symbol><symbol id="icon-document" viewBox="0 0 24 24"><path d="M5 2h10l4 4v16H5V2Zm9 2v3h3l-3-3ZM8 11h8V9H8v2Zm0 4h8v-2H8v2Zm0 4h6v-2H8v2Z"/></symbol><symbol id="icon-calendar" viewBox="0 0 24 24"><path d="M7 2h2v3h6V2h2v3h4v17H3V5h4V2ZM5 10v10h14V10H5Zm2 3h3v3H7v-3Z"/></symbol><symbol id="icon-arrow" viewBox="0 0 24 24"><path d="m13 5 7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5Z"/></symbol><symbol id="icon-school" viewBox="0 0 24 24"><path d="m12 2 11 5-11 5L1 7l11-5ZM4 11l8 3.6 8-3.6v7H4v-7Zm-2 9h20v2H2v-2Z"/></symbol><symbol id="icon-headset" viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0v6h-5v-7h3a6 6 0 0 0-12 0h3v7H6c0 1.1.9 2 2 2h4v2H8a4 4 0 0 1-4-4v-6Z"/></symbol><symbol id="icon-target" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2Zm0 5a5 5 0 1 0 5 5h-2a3 3 0 1 1-3-3V7Zm8-5v3h-3v2h-2v2h-3v3h3v-2h2V8h3V5h2V2h-2Z"/></symbol><symbol id="icon-external" viewBox="0 0 24 24"><path d="M14 3h7v7h-2V6.4l-8.3 8.3-1.4-1.4L17.6 5H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"/></symbol>
   </svg>
   {% block extra_js %}{% endblock %}
-  <script defer src="{% static 'js/portal-animations.js' %}?v=20260916.2"></script>
   <script defer src="{% static 'js/mobile-nav.js' %}?v=20260917.3"></script>
-  {% if request.resolver_match.namespace == 'core' and request.resolver_match.url_name == 'home' %}<script defer src="{% static 'js/site-loader.js' %}?v=20260916.1"></script>{% endif %}
 </body></html>
