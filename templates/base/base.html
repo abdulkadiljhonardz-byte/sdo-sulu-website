@@ -78,7 +78,7 @@
             <a href="{% url 'pages:detail' 'contact' %}"><svg aria-hidden="true"><use href="#icon-mail"/></svg><span>Contact Us</span></a>
           </div>
         </div>
-        <a href="{% url 'content:news' %}"{% if request.resolver_match.namespace == 'content' %} class="is-current" aria-current="page"{% endif %}>News</a><a href="{% url 'schools:directory' %}"{% if request.resolver_match.namespace == 'schools' %} class="is-current" aria-current="page"{% endif %}>Schools</a><a href="{% url 'events:list' %}"{% if request.resolver_match.namespace == 'events' %} class="is-current" aria-current="page"{% endif %}>Events</a><a class="nav-search{% if request.resolver_match.url_name == 'search' %} is-current{% endif %}" href="{% url 'core:search' %}" aria-label="Search portal"><svg aria-hidden="true"><use href="#icon-search"/></svg></a>
+        <a href="{% url 'content:news' %}"{% if request.resolver_match.namespace == 'content' %} class="is-current" aria-current="page"{% endif %}>Notice</a><a href="{% url 'schools:directory' %}"{% if request.resolver_match.namespace == 'schools' %} class="is-current" aria-current="page"{% endif %}>Schools</a><a href="{% url 'events:list' %}"{% if request.resolver_match.namespace == 'events' %} class="is-current" aria-current="page"{% endif %}>Events</a><a class="nav-search{% if request.resolver_match.url_name == 'search' %} is-current{% endif %}" href="{% url 'core:search' %}" aria-label="Search portal"><svg aria-hidden="true"><use href="#icon-search"/></svg></a>
       </div>
       <button class="mobile-nav-backdrop" type="button" tabindex="-1" aria-label="Close navigation menu"></button>
     </div></nav>

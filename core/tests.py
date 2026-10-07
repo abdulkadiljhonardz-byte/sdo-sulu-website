@@ -489,7 +489,7 @@ class ContentManagementTests(TestCase):
             self.assertFalse(storage.exists(image_name))
             self.assertTrue(
                 AuditLog.objects.filter(
-                    action="News Article permanently deleted",
+                    action="Notice permanently deleted",
                     object_id=str(item_id),
                 ).exists()
             )

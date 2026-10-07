@@ -390,7 +390,7 @@ class BulkImportForm(forms.Form):
 class ReportFilterForm(forms.Form):
     REPORT_CHOICES = [
         ("issuances", "Issuances"), ("schools", "Schools"),
-        ("news", "News"), ("complaints", "Complaints"),
+        ("news", "Notices"), ("complaints", "Complaints"),
         ("staff", "Active staff"), ("analytics", "Portal analytics"),
     ]
     report = forms.ChoiceField(choices=REPORT_CHOICES)

@@ -72,7 +72,7 @@ def home(request):
             "title": featured_news.title,
             "published_date": (featured_news.published_at or featured_news.created_at).date(),
             "url": reverse("content:news_detail", args=[featured_news.slug]),
-            "kind": "News",
+            "kind": "Notice",
             "sort_date": featured_news.published_at or featured_news.created_at,
         })
     if featured_memo:

@@ -64,7 +64,7 @@ from .data_tools import (
 
 CONTENT_TYPES = {
     "issuances": {"label": "Issuances & Memoranda", "singular": "issuance", "model": Issuance, "form": IssuanceManagementForm, "search": ("title", "reference_number", "keywords"), "office_field": "office", "publish_field": "status", "published_value": "PUBLISHED", "draft_value": "DRAFT"},
-    "news": {"label": "News", "singular": "news article", "model": News, "form": NewsManagementForm, "search": ("title", "body", "category"), "office_field": "office", "publish_field": "is_published", "published_value": True, "draft_value": False},
+    "news": {"label": "Notices", "singular": "notice", "model": News, "form": NewsManagementForm, "search": ("title", "body", "category"), "office_field": "office", "publish_field": "is_published", "published_value": True, "draft_value": False},
     "downloads": {"label": "Downloads", "singular": "download", "model": Download, "form": DownloadManagementForm, "search": ("title", "category", "description"), "office_field": "office", "publish_field": "published", "published_value": True, "draft_value": False},
     "events": {"label": "Events", "singular": "event", "model": Event, "form": EventManagementForm, "search": ("title", "location", "organizer", "category"), "office_field": "office"},
     "vacancies": {"label": "Job Vacancies", "singular": "vacancy", "model": Vacancy, "form": VacancyManagementForm, "search": ("position", "employment_type", "status"), "office_field": "office"},
@@ -172,12 +172,12 @@ def facebook_news_sync(request):
         else:
             record_action(
                 request,
-                "Official Facebook News synchronized",
+                "Official Facebook notices synchronized",
                 current=summary.as_dict(),
             )
             messages.success(
                 request,
-                f"Facebook sync finished: {summary.imported} News imported and "
+                f"Facebook sync finished: {summary.imported} notices imported and "
                 f"{summary.excluded_memos} memorandum posts excluded.",
             )
     return render(
@@ -352,7 +352,7 @@ def analytics_dashboard(request):
     top_searches = recent.filter(event_type=AnalyticsEvent.Type.SEARCH).exclude(query="").values("query").annotate(total=Count("id")).order_by("-total")[:10]
     top_news_events = recent.filter(event_type=AnalyticsEvent.Type.NEWS_VIEW).exclude(object_id="").values("object_id").annotate(total=Count("id")).order_by("-total")[:10]
     news_map = {str(item.pk): item.title for item in News.objects.filter(pk__in=[row["object_id"] for row in top_news_events])}
-    top_news = [{"title": news_map.get(row["object_id"], "Deleted news item"), "total": row["total"]} for row in top_news_events]
+    top_news = [{"title": news_map.get(row["object_id"], "Deleted notice"), "total": row["total"]} for row in top_news_events]
     context = {
         "published_issuances": Issuance.objects.filter(status="PUBLISHED", archived=False).filter(Q(publish_at__isnull=True)|Q(publish_at__lte=timezone.now())).filter(Q(expires_at__isnull=True)|Q(expires_at__gt=timezone.now())).count(),
         "published_news": News.objects.filter(is_published=True, archived=False).filter(Q(published_at__isnull=True)|Q(published_at__lte=timezone.now())).filter(Q(expires_at__isnull=True)|Q(expires_at__gt=timezone.now())).count(),
@@ -602,7 +602,7 @@ def facebook_import(request, kind):
     if item.is_published:
         messages.success(
             request,
-            "Facebook caption and photo were imported and published. You can still review or edit the news item.",
+            "Facebook caption and photo were imported and published. You can still review or edit the notice.",
         )
     else:
         messages.success(
