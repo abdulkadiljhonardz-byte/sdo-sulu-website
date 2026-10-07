@@ -15,7 +15,7 @@ from datetime import date, datetime, timedelta
 from accounts.models import Role, StaffProfile, User
 from audit.models import AuditLog
 from audit.utils import record_action
-from content.models import Download, News, PublicPage, SiteSetting
+from content.models import Download, HomepageSlide, News, PublicPage, SiteSetting
 from content.facebook_import import FacebookImportError, import_facebook_post
 from content.facebook_page_sync import FacebookPageSyncError, sync_facebook_news
 from events.models import Event
@@ -38,6 +38,7 @@ from .management_forms import (
     DownloadManagementForm,
     EventManagementForm,
     FacebookImportForm,
+    HomepageSlideManagementForm,
     IssuanceManagementForm,
     NewsManagementForm,
     NotificationManagementForm,
@@ -73,6 +74,7 @@ CONTENT_TYPES = {
     "offices": {"label": "Offices & Sections", "singular": "office", "model": Office, "form": OfficeManagementForm, "search": ("name", "code", "email"), "admin_only": True},
     "districts": {"label": "Districts", "singular": "district", "model": District, "form": DistrictManagementForm, "search": ("name", "municipality"), "admin_only": True},
     "public-pages": {"label": "Public Information Pages", "singular": "public page", "model": PublicPage, "form": PublicPageManagementForm, "search": ("title", "slug", "body"), "admin_only": True},
+    "homepage-slides": {"label": "Homepage Slides", "singular": "slide", "model": HomepageSlide, "form": HomepageSlideManagementForm, "search": ("title", "caption"), "publish_field": "active", "published_value": True, "draft_value": False, "admin_only": True, "ordering": ("sort_order", "-updated_at")},
 }
 
 
@@ -471,14 +473,14 @@ def content_list(request, kind):
     query = request.GET.get("q", "").strip()
     items = _scope_queryset(
         request.user, config, config["model"].objects.all()
-    ).order_by("-updated_at")
+    ).order_by(*config.get("ordering", ("-updated_at",)))
     if query:
         search_query = Q()
         for field in config["search"]:
             search_query |= Q(**{f"{field}__icontains": query})
         items = items.filter(search_query)
     page = Paginator(items, 20).get_page(request.GET.get("page"))
-    can_delete = kind in {"news", "issuances"} and (
+    can_delete = kind in {"news", "issuances", "homepage-slides"} and (
         request.user.is_superuser
         or request.user.role in {Role.SUPER_ADMIN, Role.ADMIN}
     )
@@ -722,7 +724,7 @@ def content_archive(request, kind, pk):
 @transaction.atomic
 def content_delete(request, kind, pk):
     """Permanently delete News or an Issuance after an explicit admin POST."""
-    if kind not in {"news", "issuances"}:
+    if kind not in {"news", "issuances", "homepage-slides"}:
         raise PermissionDenied
     _require_system_admin(request.user)
     if request.method != "POST" or request.POST.get("confirm") != "DELETE":
@@ -742,6 +744,7 @@ def content_delete(request, kind, pk):
             stored_files.append((field_file.storage, field_file.name))
 
     remember(getattr(item, "cover_image", None))
+    remember(getattr(item, "image", None))
     remember(getattr(item, "pdf", None))
     if kind == "issuances":
         for version in item.versions.all():

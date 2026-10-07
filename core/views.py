@@ -9,7 +9,7 @@ from django.http import FileResponse, Http404, JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
 from django.utils import timezone
-from content.models import Download, News
+from content.models import Download, HomepageSlide, News
 from events.models import Event
 from schools.models import School
 from issuances.models import Issuance
@@ -91,6 +91,9 @@ def home(request):
 
     return render(request, "core/home.html", {
         "featured_advisory": featured_advisory,
+        "homepage_slides": HomepageSlide.objects.filter(active=True).order_by(
+            "sort_order", "-updated_at"
+        )[:10],
         "news": _active_window(News.objects.filter(is_published=True, archived=False), "published_at")[:3],
         "events": Event.objects.filter(start__gte=timezone.now()).order_by("start")[:4],
         "latest_memos": _active_window(

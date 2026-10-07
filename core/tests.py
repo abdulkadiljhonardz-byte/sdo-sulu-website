@@ -13,7 +13,7 @@ from PIL import Image
 from accounts.models import Role, StaffProfile, User
 from accounts.roles import synchronize_role_permissions
 from audit.models import AuditLog
-from content.models import News, PublicPage, SiteSetting
+from content.models import HomepageSlide, News, PublicPage, SiteSetting
 from content.facebook_import import ImportedFacebookPost
 from content.facebook_page_sync import is_memorandum, sync_facebook_news
 from core.models import AnalyticsEvent
@@ -108,6 +108,79 @@ class ContentManagementTests(TestCase):
             response, reverse("core:content_list", args=["news"])
         )
         self.assertTrue(News.objects.get().cover_image.name.endswith(".png"))
+
+    def test_homepage_slider_shows_only_active_slides_in_order(self):
+        later = HomepageSlide.objects.create(
+            title="Second banner",
+            image="public/second-banner.png",
+            sort_order=20,
+        )
+        earlier = HomepageSlide.objects.create(
+            title="First banner",
+            image="public/first-banner.png",
+            sort_order=10,
+        )
+        HomepageSlide.objects.create(
+            title="Hidden banner",
+            image="public/hidden-banner.png",
+            sort_order=0,
+            active=False,
+        )
+
+        response = self.client.get(reverse("core:home"))
+
+        self.assertContains(response, 'data-carousel')
+        self.assertContains(response, earlier.title)
+        self.assertContains(response, later.title)
+        self.assertNotContains(response, "Hidden banner")
+        self.assertLess(
+            response.content.index(earlier.title.encode()),
+            response.content.index(later.title.encode()),
+        )
+
+    def test_sdo_administrator_can_create_homepage_slide(self):
+        admin = User.objects.create_user(
+            "slideadmin",
+            password="StrongPass!234",
+            role=Role.ADMIN,
+            is_staff=True,
+        )
+        self.client.force_login(admin)
+        with TemporaryDirectory() as media_root, self.settings(MEDIA_ROOT=media_root):
+            response = self.client.post(
+                reverse("core:content_create", args=["homepage-slides"]),
+                {
+                    "title": "Enrollment banner",
+                    "caption": "Enrollment information is now available.",
+                    "image": SimpleUploadedFile(
+                        "banner.png", self._png_bytes(), content_type="image/png"
+                    ),
+                    "link_label": "View details",
+                    "link_url": "https://example.com/enrollment/",
+                    "sort_order": 5,
+                    "active": "on",
+                },
+            )
+
+        self.assertRedirects(
+            response, reverse("core:content_list", args=["homepage-slides"])
+        )
+        slide = HomepageSlide.objects.get()
+        self.assertEqual(slide.sort_order, 5)
+        self.assertTrue(slide.active)
+
+    def test_office_staff_cannot_manage_homepage_slides(self):
+        staff = User.objects.create_user(
+            "slidestaff",
+            password="StrongPass!234",
+            role=Role.STAFF,
+            is_staff=True,
+        )
+        self.client.force_login(staff)
+        response = self.client.get(
+            reverse("core:content_list", args=["homepage-slides"])
+        )
+        self.assertEqual(response.status_code, 403)
 
     @patch("core.management_views.import_facebook_post")
     def test_admin_facebook_import_can_publish_caption_and_photo(self, importer):

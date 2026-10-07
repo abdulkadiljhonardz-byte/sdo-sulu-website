@@ -4,7 +4,7 @@ from django import forms
 from django.utils import timezone
 from django.utils.text import slugify
 
-from content.models import Download, News, PublicPage
+from content.models import Download, HomepageSlide, News, PublicPage
 from core.validators import (
     MAX_UPLOAD_SIZE,
     validate_secure_image_upload,
@@ -89,6 +89,43 @@ class NewsManagementForm(PublicationForm):
         model = News
         fields = ("title", "body", "category", "office", "cover_image", "source_url", "published_at", "expires_at", "is_published", "is_featured", "archived")
         widgets = {"published_at": forms.DateTimeInput(attrs={"type": "datetime-local"}), "expires_at": forms.DateTimeInput(attrs={"type": "datetime-local"})}
+
+
+class HomepageSlideManagementForm(StyledModelForm):
+    class Meta:
+        model = HomepageSlide
+        fields = (
+            "title",
+            "caption",
+            "image",
+            "link_label",
+            "link_url",
+            "sort_order",
+            "active",
+        )
+        widgets = {"caption": forms.Textarea(attrs={"rows": 4})}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["image"].help_text = (
+            "Upload a wide JPG or PNG banner (recommended 1600 × 600 pixels, maximum 10 MB)."
+        )
+
+    def clean_image(self):
+        upload = self.cleaned_data.get("image")
+        if upload and not getattr(upload, "_committed", False):
+            validate_secure_image_upload(upload)
+        return upload
+
+    def clean(self):
+        cleaned = super().clean()
+        label = cleaned.get("link_label", "").strip()
+        url = cleaned.get("link_url", "").strip()
+        if label and not url:
+            self.add_error("link_url", "Enter a destination for the button.")
+        if url and not label:
+            cleaned["link_label"] = "Learn more"
+        return cleaned
 
 
 class FacebookImportForm(forms.Form):

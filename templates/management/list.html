@@ -6,7 +6,7 @@
 <div class="managed-records">
 {% for item in page %}
   <article>
-    {% if kind == 'news' or kind == 'issuances' %}{% if item.cover_image %}<img class="managed-cover-thumb" src="{{ item.cover_image.url }}" alt="" loading="lazy">{% endif %}{% endif %}
+    {% if kind == 'news' or kind == 'issuances' %}{% if item.cover_image %}<img class="managed-cover-thumb" src="{{ item.cover_image.url }}" alt="" loading="lazy">{% endif %}{% elif kind == 'homepage-slides' %}{% if item.image %}<img class="managed-cover-thumb" src="{{ item.image.url }}" alt="" loading="lazy">{% endif %}{% endif %}
     <div>
       {% if kind == 'issuances' %}<strong>{{ item.reference_number }} — {{ item.title }}</strong><small>{{ item.get_category_display }} · {{ item.date_issued|date:"M d, Y" }} · {{ item.status }}</small>
       {% elif kind == 'vacancies' %}<strong>{{ item.position }}</strong><small>{{ item.office }} · Deadline {{ item.deadline|date:"M d, Y" }} · {{ item.status }}</small>
@@ -17,6 +17,7 @@
       {% elif kind == 'districts' %}<strong>{{ item.name }}</strong><small>{{ item.municipality }} · {% if item.active %}Active{% else %}Inactive{% endif %}</small>
       {% elif kind == 'verified-documents' %}<strong>{{ item.document_number }} — {{ item.document_type }}</strong><small>{{ item.issuing_office }} · {{ item.date_issued|date:"M d, Y" }} · {{ item.status }}</small>
       {% elif kind == 'public-pages' %}<strong>{{ item.title }}</strong><small>/information/{{ item.slug }}/ · {% if item.published %}Published{% else %}Draft{% endif %}</small>
+      {% elif kind == 'homepage-slides' %}<strong>{{ item.title }}</strong><small>Order {{ item.sort_order }} · {% if item.active %}Active{% else %}Inactive{% endif %}</small>
       {% else %}<strong>{{ item.title }}</strong><small>{{ item.category|default:"Uncategorized" }} · {% if item.is_published %}Published{% else %}Draft{% endif %}{% if item.archived %} · Archived{% endif %}</small>{% endif %}
     </div>
     <div class="managed-actions"><a href="{% url 'core:content_preview' kind item.pk %}">Preview</a>{% if can_change %}<a href="{% url 'core:content_update' kind item.pk %}">Edit</a>{% if kind == 'issuances' or kind == 'news' or kind == 'downloads' %}<form method="post" action="{% url 'core:content_archive' kind item.pk %}" onsubmit="return confirm('Archive this record? It will be removed from the public portal.');">{% csrf_token %}<input type="hidden" name="confirm" value="ARCHIVE"><button type="submit">Archive</button></form>{% endif %}{% endif %}{% if can_delete %}<form method="post" action="{% url 'core:content_delete' kind item.pk %}" onsubmit="return confirm('Permanently delete this {{ config.singular }}? This cannot be undone and its uploaded files will also be removed.');">{% csrf_token %}<input type="hidden" name="confirm" value="DELETE"><button class="delete-action" type="submit">Delete</button></form>{% endif %}</div>

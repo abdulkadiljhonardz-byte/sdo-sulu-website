@@ -55,6 +55,33 @@ class SiteSetting(TimeStampedModel):
     key = models.CharField(max_length=100, unique=True); value = models.TextField(blank=True)
 
 
+class HomepageSlide(TimeStampedModel):
+    title = models.CharField(max_length=180)
+    caption = models.TextField(blank=True)
+    image = models.ImageField(upload_to=public_upload)
+    link_label = models.CharField(
+        max_length=60,
+        blank=True,
+        help_text="Optional button text, for example Learn more.",
+    )
+    link_url = models.URLField(
+        max_length=1000,
+        blank=True,
+        help_text="Optional page opened by the slide button.",
+    )
+    sort_order = models.PositiveSmallIntegerField(
+        default=0,
+        help_text="Lower numbers appear first.",
+    )
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["sort_order", "-updated_at"]
+
+    def __str__(self):
+        return self.title
+
+
 class PublicPage(TimeStampedModel):
     slug = models.SlugField(unique=True)
     title = models.CharField(max_length=200)
