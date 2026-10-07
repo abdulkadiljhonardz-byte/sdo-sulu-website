@@ -16,7 +16,7 @@ class SchoolDirectoryTests(TestCase):
             457,
         )
 
-    def test_directory_shows_target_and_filters_schools_by_district(self):
+    def test_directory_is_simple_and_filters_schools_by_district(self):
         indanan = District.objects.get(name="Indanan")
         jolo = District.objects.get(name="Jolo I")
         School.objects.create(
@@ -38,6 +38,8 @@ class SchoolDirectoryTests(TestCase):
             reverse("schools:directory"), {"district": indanan.pk}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["total_target"], 457)
         self.assertContains(response, "Indanan Sample School")
         self.assertNotContains(response, "Jolo Sample School")
+        self.assertContains(response, "Find a school in Sulu.")
+        self.assertNotContains(response, "Public-school targets")
+        self.assertNotContains(response, "target total is calculated")

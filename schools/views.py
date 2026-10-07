@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Count, Q, Sum
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from core.analytics import record_event
 from core.models import AnalyticsEvent
@@ -22,20 +22,7 @@ def directory(request):
     if selected_district.isdigit():
         schools = schools.filter(district_id=selected_district)
 
-    districts = (
-        District.objects.filter(active=True)
-        .annotate(
-            listed_public_schools=Count(
-                "schools",
-                filter=Q(schools__classification="PUBLIC", schools__status="ACTIVE"),
-            )
-        )
-        .order_by("name")
-    )
-    total_target = districts.aggregate(target=Sum("public_school_target"))["target"] or 0
-    listed_public_schools = School.objects.filter(
-        classification="PUBLIC", status="ACTIVE"
-    ).count()
+    districts = District.objects.filter(active=True).order_by("name")
     page = Paginator(schools.order_by("name"), 20).get_page(request.GET.get("page"))
     return render(
         request,
@@ -45,8 +32,6 @@ def directory(request):
             "page": page,
             "districts": districts,
             "district_count": districts.count(),
-            "total_target": total_target,
-            "listed_public_schools": listed_public_schools,
             "query": query,
             "selected_district": selected_district,
         },
