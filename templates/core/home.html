@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block title %}SDO Sulu — Official Portal{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'css/homepage-slider.css' %}?v=20261007.1">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/homepage-slider.css' %}?v=20261007.2">{% endblock %}
 {% block main_class %}home-main{% endblock %}
 {% block content %}
 {% if PORTAL_SETTINGS.HOMEPAGE_BANNER %}<aside class="important-notice"><div class="site-shell"><strong>Official Notice</strong><p>{{ PORTAL_SETTINGS.HOMEPAGE_BANNER }}</p></div></aside>{% endif %}
@@ -10,18 +10,24 @@
   <img class="masthead-office" src="{% static 'sdooffice.png' %}?v=20260917.6" alt="" aria-hidden="true">
   <img class="masthead-map" src="{% static 'map.png' %}?v=20260917.6" alt="" aria-hidden="true">
   <div class="masthead-lines" aria-hidden="true"></div>
+  <div class="site-shell hero-official-identity">
+    <img class="hero-official-seal" src="{% static 'logosdo.jpeg' %}" alt="Schools Division Office of Sulu official seal" width="180" height="180">
+    <div class="hero-official-copy">
+      <p>Republic of the Philippines</p>
+      <h1>Schools Division Office <span>- Sulu</span></h1>
+      <p>Department of Education</p>
+    </div>
+  </div>
 </section>
 
 {% if homepage_slides %}
-<section class="homepage-carousel" aria-label="Featured banners" aria-roledescription="carousel" data-carousel>
+<section class="homepage-carousel" aria-label="Homepage banners" aria-roledescription="carousel" data-carousel>
   <div class="site-shell carousel-shell">
     <div class="carousel-viewport">
       {% for slide in homepage_slides %}
       <article class="carousel-slide{% if forloop.first %} is-active{% endif %}" data-carousel-slide aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
         <img src="{{ slide.image.url }}" alt="{{ slide.title }}"{% if not forloop.first %} loading="lazy"{% endif %}>
-        <div class="carousel-shade" aria-hidden="true"></div>
         <div class="carousel-copy">
-          <p>Featured</p>
           <h2>{{ slide.title }}</h2>
           {% if slide.caption %}<span>{{ slide.caption }}</span>{% endif %}
           {% if slide.link_url %}<a href="{{ slide.link_url }}">{{ slide.link_label|default:"Learn more" }} <svg aria-hidden="true"><use href="#icon-arrow"/></svg></a>{% endif %}

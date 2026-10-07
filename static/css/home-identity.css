@@ -1,0 +1,91 @@
+.hero-official-identity {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3.2vw, 44px);
+  min-height: 500px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  color: #fff;
+}
+
+.hero-official-seal {
+  flex: 0 0 auto;
+  width: clamp(132px, 15vw, 180px);
+  height: clamp(132px, 15vw, 180px);
+  border: 5px solid rgba(255, 255, 255, .92);
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+  box-shadow: 0 18px 44px rgba(0, 30, 20, .32);
+}
+
+.hero-official-copy {
+  min-width: 0;
+  max-width: 920px;
+  text-shadow: 0 3px 18px rgba(0, 30, 20, .45);
+}
+
+.hero-official-copy p {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.15rem, 2.2vw, 1.85rem);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.hero-official-copy h1 {
+  margin: 9px 0 8px;
+  padding-top: 9px;
+  border-top: 4px solid rgba(255, 255, 255, .95);
+  color: #fff;
+  font-family: "DM Sans", sans-serif;
+  font-size: clamp(2.15rem, 4.7vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -.035em;
+  line-height: 1.04;
+}
+
+.hero-official-copy h1 span { white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .hero-official-identity { min-height: 440px; }
+  .hero-official-copy h1 { font-size: clamp(2rem, 5vw, 3.25rem); }
+}
+
+@media (max-width: 700px) {
+  .home-masthead.home-masthead-visual-only { min-height: 440px; }
+
+  .hero-official-identity {
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    min-height: 440px;
+    padding-top: 34px;
+    padding-bottom: 34px;
+    text-align: center;
+  }
+
+  .hero-official-seal {
+    width: 112px;
+    height: 112px;
+    border-width: 4px;
+  }
+
+  .hero-official-copy { width: 100%; }
+
+  .hero-official-copy p { font-size: clamp(.95rem, 4.7vw, 1.25rem); }
+
+  .hero-official-copy h1 {
+    margin: 8px 0;
+    padding-top: 9px;
+    border-top-width: 3px;
+    font-size: clamp(1.7rem, 8.3vw, 2.45rem);
+    line-height: 1.08;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero-official-copy h1 span { white-space: normal; }
+}

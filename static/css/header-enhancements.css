@@ -127,6 +127,31 @@
   transform: translateY(-2px);
 }
 
+.nav-government-marks {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  margin-left: 17px;
+  padding-left: 17px;
+  border-left: 1px solid #d9e4df;
+}
+
+.nav-government-marks img {
+  display: block;
+  object-fit: contain;
+}
+
+.nav-deped-logo {
+  width: 108px;
+  height: auto;
+}
+
+.nav-bagong-pilipinas-logo {
+  width: 45px;
+  height: 51px;
+}
+
 .nav-dropdown-menu {
   width: 275px;
   padding: 8px 0;
@@ -181,6 +206,28 @@
   .brand-logo {
     width: 45px;
     height: 45px;
+  }
+
+  .nav-government-marks {
+    order: 1;
+    display: flex;
+    gap: 7px;
+    margin-left: auto;
+    padding-left: 10px;
+  }
+
+  .nav-government-marks .nav-deped-logo {
+    width: 82px;
+  }
+
+  .nav-government-marks .nav-bagong-pilipinas-logo {
+    width: 31px;
+    height: 35px;
+  }
+
+  .menu-button {
+    order: 2;
+    margin-left: 12px;
   }
 
   #primary-menu > a.is-current:not(.nav-search),
@@ -243,9 +290,38 @@
     font-size: 1rem;
   }
 
+  .main-nav .brand > span {
+    display: none;
+  }
+
+  .main-nav .brand {
+    flex: 0 0 auto;
+  }
+
+  .nav-government-marks {
+    padding-left: 8px;
+  }
+
   #primary-menu.nav-links {
     width: min(88vw, 370px);
     padding-right: 14px;
     padding-left: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-government-marks .nav-deped-logo {
+    width: 70px;
+  }
+
+  .nav-government-marks .nav-bagong-pilipinas-logo {
+    width: 27px;
+    height: 31px;
+  }
+
+  .menu-button {
+    width: 42px;
+    height: 42px;
+    margin-left: 8px;
   }
 }
