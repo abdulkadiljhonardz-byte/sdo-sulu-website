@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.core.paginator import Paginator
 from django.http import FileResponse, Http404
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
@@ -14,8 +15,14 @@ def index(request):
     valid_categories=dict(Issuance.Category.choices)
     if category in valid_categories: items=items.filter(category=category)
     else: category=""
-    local_categories = [choice for choice in Issuance.Category.choices if not choice[0].startswith("DEPED_")]
-    return render(request,"issuances/list.html",{"items":items,"q":q,"category":category,"category_label":valid_categories.get(category,"All Issuances"),"categories":local_categories})
+    local_categories = [
+        (value, "Division Memorandum" if value == Issuance.Category.DIVISION_MEMO else label)
+        for value, label in Issuance.Category.choices
+        if not value.startswith("DEPED_")
+    ]
+    display_labels = dict(local_categories)
+    page = Paginator(items, 10).get_page(request.GET.get("page"))
+    return render(request,"issuances/list.html",{"items":page,"q":q,"category":category,"category_label":display_labels.get(category,"All Issuances"),"categories":local_categories})
 
 
 def download(request, pk):

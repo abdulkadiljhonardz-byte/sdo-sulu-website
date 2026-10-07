@@ -50,6 +50,33 @@ class InformationPortalModeTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class IssuanceArchiveTests(TestCase):
+    def test_division_memorandum_archive_uses_compact_paginated_entries(self):
+        for index in range(11):
+            Issuance.objects.create(
+                category=Issuance.Category.DIVISION_MEMO,
+                reference_number=f"DM-{index + 1:03d}-2026",
+                title=f"Official memorandum number {index + 1}",
+                year=2026,
+                date_issued=date(2026, 10, min(index + 1, 28)),
+                pdf="issuances/latest.pdf" if index == 10 else "",
+                status="PUBLISHED",
+            )
+
+        response = self.client.get(
+            reverse("issuances:list"),
+            {"category": Issuance.Category.DIVISION_MEMO},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Division Memorandum")
+        self.assertContains(response, "Posted on")
+        self.assertContains(response, "Download PDF")
+        self.assertContains(response, 'class="issuance-entry"', count=10)
+        self.assertEqual(response.context["items"].paginator.count, 11)
+        self.assertContains(response, "Page 1 of 2")
+
+
 class ContentManagementTests(TestCase):
     @staticmethod
     def _png_bytes():

@@ -1,29 +1,61 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block title %}{{ category_label }} — SDO Sulu{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'css/issuances.css' %}"><link rel="stylesheet" href="{% static 'css/issuance-covers.css' %}?v=20260917.2">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/issuances.css' %}?v=20261007.1">{% endblock %}
 {% block content %}
-<header class="repository-header">
-  <p class="repository-kicker">Official Documents</p>
+<nav class="issuance-breadcrumb" aria-label="Breadcrumb"><a href="{% url 'core:home' %}">Home</a><span aria-hidden="true">›</span><span>Issuances</span>{% if category %}<span aria-hidden="true">›</span><strong>{{ category_label }}</strong>{% endif %}</nav>
+
+<header class="issuance-archive-heading">
+  <p>Official Documents</p>
   <h1>{{ category_label }}</h1>
-  <p>Search and download official issuances published by the Schools Division Office of Sulu.</p>
+  <span>Browse and download official issuances published by the Schools Division Office of Sulu.</span>
 </header>
 
-<nav class="category-tabs" aria-label="Issuance category filters">
-  <a href="{% url 'issuances:list' %}" {% if not category %}class="active" aria-current="page"{% endif %}>All</a>
-  {% for value,label in categories %}<a href="{% url 'issuances:list' %}?category={{ value }}" {% if category == value %}class="active" aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
-</nav>
+<div class="issuance-archive-layout">
+  <aside class="issuance-category-panel">
+    <h2>Issuance Categories</h2>
+    <nav aria-label="Issuance category filters">
+      <a href="{% url 'issuances:list' %}"{% if not category %} class="active" aria-current="page"{% endif %}>All Issuances</a>
+      {% for value,label in categories %}<a href="{% url 'issuances:list' %}?category={{ value }}"{% if category == value %} class="active" aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
+    </nav>
+  </aside>
 
-<form class="repository-search" method="get">
-  {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
-  <label for="issuance-search">Search title, reference number, or keyword</label>
-  <div><input id="issuance-search" name="q" value="{{ q }}" placeholder="e.g. Division Memorandum No. 123"><button type="submit"><svg><use href="#icon-search"/></svg> Search</button></div>
-</form>
+  <section class="issuance-archive-results" aria-label="Issuance results">
+    <form class="issuance-archive-search" method="get" role="search">
+      {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
+      <label for="issuance-search">Search this archive</label>
+      <div><input id="issuance-search" type="search" name="q" value="{{ q }}" placeholder="Title, reference number, or keyword"><button type="submit" aria-label="Search issuances"><svg aria-hidden="true"><use href="#icon-search"/></svg><span>Search</span></button></div>
+    </form>
 
-<div class="repository-table-wrap">
-  <table class="repository-table">
-    <thead><tr><th>Reference number</th><th>Title</th><th>Category</th><th>Date issued</th><th><span class="sr-only">Download</span></th></tr></thead>
-    <tbody>{% for item in items %}<tr><td><strong>{{ item.reference_number }}</strong></td><td><div class="issuance-title-cell">{% if item.cover_image %}<a class="issuance-thumbnail" href="{% url 'issuances:detail' item.pk %}"><img src="{{ item.cover_image.url }}" alt="Cover of {{ item.reference_number }}" loading="lazy"></a>{% else %}<span class="issuance-thumbnail issuance-thumbnail-empty" aria-hidden="true">MEMO</span>{% endif %}<span><a class="document-title" href="{% url 'issuances:detail' item.pk %}">{{ item.title }}</a>{% if item.office %}<small>{{ item.office }}</small>{% endif %}</span></div></td><td><span class="category-badge">{{ item.get_category_display }}</span></td><td>{% if item.date_issued %}{{ item.date_issued|date:"M d, Y" }}{% else %}{{ item.year }}{% endif %}</td><td>{% if item.pdf %}<a class="download-link" href="{% url 'issuances:download' item.pk %}" aria-label="Download {{ item.title }}"><svg><use href="#icon-document"/></svg> PDF</a>{% elif item.source_url %}<a class="download-link" href="{{ item.source_url }}" target="_blank" rel="noopener noreferrer" aria-label="Open the original Facebook post for {{ item.title }}"><svg><use href="#icon-arrow"/></svg> Facebook</a>{% else %}<a class="download-link" href="{% url 'issuances:detail' item.pk %}">Details</a>{% endif %}</td></tr>{% empty %}<tr><td class="repository-empty" colspan="5">No published issuances found{% if q %} for “{{ q }}”{% endif %}.</td></tr>{% endfor %}</tbody>
-  </table>
+    <div class="issuance-entry-list">
+      {% for item in items %}
+      <article class="issuance-entry">
+        <p>{{ item.get_category_display }}</p>
+        <h2><a href="{% url 'issuances:detail' item.pk %}"><strong>{{ item.reference_number }}</strong><span aria-hidden="true">:</span> {{ item.title }}</a></h2>
+        <div class="issuance-entry-meta">
+          <span>Posted on <time{% if item.date_issued %} datetime="{{ item.date_issued|date:'Y-m-d' }}"{% endif %}>{% if item.date_issued %}{{ item.date_issued|date:"F d, Y" }}{% else %}Series of {{ item.year }}{% endif %}</time></span>
+          {% if item.office %}<span>{{ item.office }}</span>{% endif %}
+        </div>
+        <div class="issuance-entry-actions">
+          {% if item.pdf %}<a class="issuance-download" href="{% url 'issuances:download' item.pk %}" aria-label="Download {{ item.reference_number }} as PDF"><svg aria-hidden="true"><use href="#icon-document"/></svg> Download PDF</a>{% elif item.source_url %}<a class="issuance-download" href="{{ item.source_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#icon-arrow"/></svg> Open official source</a>{% endif %}
+          <a class="issuance-details" href="{% url 'issuances:detail' item.pk %}">View details</a>
+        </div>
+      </article>
+      {% empty %}<p class="issuance-archive-empty">No published issuances found{% if q %} for “{{ q }}”{% endif %}.</p>{% endfor %}
+    </div>
+
+    {% if items.has_other_pages %}<nav class="issuance-pagination" aria-label="Issuance result pages">
+      {% if items.has_previous %}<a href="?{% if category %}category={{ category|urlencode }}&amp;{% endif %}{% if q %}q={{ q|urlencode }}&amp;{% endif %}page={{ items.previous_page_number }}">Previous</a>{% endif %}
+      <span>Page {{ items.number }} of {{ items.paginator.num_pages }}</span>
+      {% if items.has_next %}<a href="?{% if category %}category={{ category|urlencode }}&amp;{% endif %}{% if q %}q={{ q|urlencode }}&amp;{% endif %}page={{ items.next_page_number }}">Next</a>{% endif %}
+    </nav>{% endif %}
+  </section>
+
+  <aside class="issuance-help-panel">
+    <span><svg aria-hidden="true"><use href="#icon-document"/></svg></span>
+    <h2>Official document access</h2>
+    <p>Open an issuance to view its details or download the complete signed PDF.</p>
+    <a href="{% url 'core:search' %}">Search the full portal</a>
+  </aside>
 </div>
 {% endblock %}
