@@ -56,10 +56,6 @@ a, button { transition-duration: 140ms; }
   min-height: 500px;
   padding: 60px 0;
 }
-.portal-hero-sidebar-only {
-  grid-template-columns: minmax(330px, .72fr);
-  justify-content: end;
-}
 .portal-hero-copy { max-width: 650px; }
 .portal-kicker, .section-overline {
   margin: 0 0 13px;
@@ -154,6 +150,7 @@ a, button { transition-duration: 140ms; }
 }
 @media (max-width: 700px) {
   .home-masthead { min-height: 0; }
+  .home-masthead.home-masthead-visual-only { min-height: 360px; }
   .masthead-lines { background: rgba(15,54,43,.89); }
   .portal-hero { padding: 48px 0; }
   .portal-hero-copy h1 { font-size: 2.35rem; }

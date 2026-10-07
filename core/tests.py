@@ -39,6 +39,11 @@ class InformationPortalModeTests(TestCase):
         self.assertNotContains(response, "Help Desk")
         self.assertContains(response, "Public information")
 
+    def test_home_hero_does_not_show_featured_update_or_upcoming_events(self):
+        response = self.client.get(reverse("core:home"))
+        self.assertNotContains(response, "Featured update")
+        self.assertNotContains(response, "Upcoming events")
+
     @override_settings(ENABLE_ONLINE_TRANSACTIONS=True)
     def test_feature_gate_can_be_enabled_explicitly(self):
         response = self.client.get(reverse("services:track"))
