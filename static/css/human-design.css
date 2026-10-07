@@ -45,7 +45,7 @@ a, button { transition-duration: 140ms; }
   clip-path: none;
 }
 .masthead-lines::before, .home-masthead::after { display: none; }
-.masthead-map { display: none; }
+.masthead-map { display: block; }
 .portal-hero {
   position: relative;
   z-index: 3;
