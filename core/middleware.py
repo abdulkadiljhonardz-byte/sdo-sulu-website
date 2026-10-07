@@ -23,7 +23,7 @@ class OnlineTransactionsDisabledMiddleware:
 
 
 class MaintenanceModeMiddleware:
-    allowed_prefixes = ("/account/", "/dashboard/", "/secure-admin/", "/static/", "/media/", "/health/")
+    allowed_prefixes = ("/account/", "/oauth/", "/dashboard/", "/secure-admin/", "/static/", "/media/", "/health/")
 
     def __init__(self, get_response):
         self.get_response = get_response

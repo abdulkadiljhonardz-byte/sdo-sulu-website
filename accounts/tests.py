@@ -1,8 +1,23 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from .models import Role,User
 
 class AccountTests(TestCase):
+    google_settings = {
+        "google": {
+            "APPS": [
+                {
+                    "client_id": "test-client.apps.googleusercontent.com",
+                    "secret": "test-secret",
+                    "key": "",
+                }
+            ],
+            "SCOPE": ["profile", "email"],
+            "OAUTH_PKCE_ENABLED": True,
+            "VERIFIED_EMAIL": True,
+        }
+    }
+
     def test_superuser_receives_super_admin_role(self):
         user=User.objects.create_superuser("root","root@example.com","StrongPass!234")
         self.assertEqual(user.role,Role.SUPER_ADMIN)
@@ -12,6 +27,19 @@ class AccountTests(TestCase):
         User.objects.create_user("teacher",email="teacher@example.com",password="StrongPass!234")
         response=self.client.post(reverse("accounts:login"),{"username":"teacher@example.com","password":"StrongPass!234"})
         self.assertEqual(response.status_code,302)
+
+    @override_settings(GOOGLE_LOGIN_ENABLED=True)
+    def test_login_page_offers_google_sign_in(self):
+        with self.settings(SOCIALACCOUNT_PROVIDERS=self.google_settings):
+            response = self.client.get(reverse("accounts:login"))
+        self.assertContains(response, "Continue with Google")
+
+    def test_google_login_starts_with_post_and_redirects_to_google(self):
+        with self.settings(SOCIALACCOUNT_PROVIDERS=self.google_settings):
+            self.assertEqual(self.client.get(reverse("google_login")).status_code, 200)
+            response = self.client.post(reverse("google_login"))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response["Location"].startswith("https://accounts.google.com/"))
 
     def test_profile_requires_authentication(self):
         response=self.client.get(reverse("accounts:profile"))

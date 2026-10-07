@@ -27,21 +27,30 @@ if not DEBUG:
 # submission endpoints are not mounted unless explicitly enabled.
 ENABLE_ONLINE_TRANSACTIONS=os.environ.get("ENABLE_ONLINE_TRANSACTIONS","False").lower()=="true"
 ENABLE_PUBLIC_REGISTRATION=os.environ.get("ENABLE_PUBLIC_REGISTRATION","False").lower()=="true"
-INSTALLED_APPS=["django.contrib.admin","django.contrib.auth","django.contrib.contenttypes","django.contrib.sessions","django.contrib.messages","django.contrib.staticfiles","accounts.apps.AccountsConfig","core","offices","schools","content","issuances","services","appointments","tickets","feedback","vacancies","events","verification","notifications","audit"]
-MIDDLEWARE=["django.middleware.security.SecurityMiddleware","whitenoise.middleware.WhiteNoiseMiddleware","django.contrib.sessions.middleware.SessionMiddleware","django.middleware.common.CommonMiddleware","core.middleware.OnlineTransactionsDisabledMiddleware","django.middleware.csrf.CsrfViewMiddleware","django.contrib.auth.middleware.AuthenticationMiddleware","core.middleware.MaintenanceModeMiddleware","django.contrib.messages.middleware.MessageMiddleware","django.middleware.clickjacking.XFrameOptionsMiddleware","core.middleware.SecurityHeadersMiddleware"]
+INSTALLED_APPS=["django.contrib.admin","django.contrib.auth","django.contrib.contenttypes","django.contrib.sessions","django.contrib.messages","django.contrib.staticfiles","allauth","allauth.account","allauth.socialaccount","allauth.socialaccount.providers.google","accounts.apps.AccountsConfig","core","offices","schools","content","issuances","services","appointments","tickets","feedback","vacancies","events","verification","notifications","audit"]
+MIDDLEWARE=["django.middleware.security.SecurityMiddleware","whitenoise.middleware.WhiteNoiseMiddleware","django.contrib.sessions.middleware.SessionMiddleware","django.middleware.common.CommonMiddleware","core.middleware.OnlineTransactionsDisabledMiddleware","django.middleware.csrf.CsrfViewMiddleware","django.contrib.auth.middleware.AuthenticationMiddleware","allauth.account.middleware.AccountMiddleware","core.middleware.MaintenanceModeMiddleware","django.contrib.messages.middleware.MessageMiddleware","django.middleware.clickjacking.XFrameOptionsMiddleware","core.middleware.SecurityHeadersMiddleware"]
 ROOT_URLCONF="config.urls"
 TEMPLATES=[{"BACKEND":"django.template.backends.django.DjangoTemplates","DIRS":[BASE_DIR/"templates"],"APP_DIRS":True,"OPTIONS":{"context_processors":["django.template.context_processors.request","django.contrib.auth.context_processors.auth","django.contrib.messages.context_processors.messages","core.context_processors.portal_settings"]}}]
 WSGI_APPLICATION="config.wsgi.application"
 u=urlparse(os.environ.get("DATABASE_URL",""))
 DATABASES={"default":{"ENGINE":"django.db.backends.postgresql","NAME":u.path.lstrip("/"),"USER":u.username,"PASSWORD":u.password,"HOST":u.hostname,"PORT":u.port or 5432}} if u.scheme else {"default":{"ENGINE":"django.db.backends.sqlite3","NAME":BASE_DIR/"db.sqlite3"}}
 AUTH_USER_MODEL="accounts.User"
-AUTHENTICATION_BACKENDS=["accounts.backends.UsernameOrEmailBackend"]
+AUTHENTICATION_BACKENDS=["accounts.backends.UsernameOrEmailBackend","allauth.account.auth_backends.AuthenticationBackend"]
 LANGUAGE_CODE="en-us"; TIME_ZONE="Asia/Manila"; USE_I18N=True; USE_TZ=True
 STATIC_URL="/static/"; STATIC_ROOT=BASE_DIR/"staticfiles"; STATICFILES_DIRS=[BASE_DIR/"static", BASE_DIR/"imageload"]
 STORAGES={"default":{"BACKEND":"django.core.files.storage.FileSystemStorage"},"staticfiles":{"BACKEND":"whitenoise.storage.CompressedManifestStaticFilesStorage" if not DEBUG else "django.contrib.staticfiles.storage.StaticFilesStorage"}}
 MEDIA_URL="/media/"; MEDIA_ROOT=BASE_DIR/"media"
 DEFAULT_AUTO_FIELD="django.db.models.BigAutoField"
 LOGIN_URL="accounts:login"; LOGIN_REDIRECT_URL="core:dashboard"; LOGOUT_REDIRECT_URL="core:home"
+GOOGLE_OAUTH_CLIENT_ID=os.environ.get("GOOGLE_OAUTH_CLIENT_ID","").strip()
+GOOGLE_OAUTH_CLIENT_SECRET=os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET","").strip()
+GOOGLE_LOGIN_ENABLED=bool(GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET)
+ACCOUNT_ADAPTER="accounts.adapters.StaffAccountAdapter"
+SOCIALACCOUNT_AUTO_SIGNUP=False
+SOCIALACCOUNT_EMAIL_AUTHENTICATION=True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT=True
+SOCIALACCOUNT_LOGIN_ON_GET=False
+SOCIALACCOUNT_PROVIDERS={"google":{"APPS":[{"client_id":GOOGLE_OAUTH_CLIENT_ID,"secret":GOOGLE_OAUTH_CLIENT_SECRET,"key":""}] if GOOGLE_LOGIN_ENABLED else [],"SCOPE":["profile","email"],"AUTH_PARAMS":{"access_type":"online","prompt":"select_account"},"OAUTH_PKCE_ENABLED":True,"VERIFIED_EMAIL":True}}
 AUTH_PASSWORD_VALIDATORS=[{"NAME":"django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},{"NAME":"django.contrib.auth.password_validation.MinimumLengthValidator","OPTIONS":{"min_length":12}},{"NAME":"django.contrib.auth.password_validation.CommonPasswordValidator"},{"NAME":"django.contrib.auth.password_validation.NumericPasswordValidator"}]
 SESSION_COOKIE_HTTPONLY=True; SESSION_COOKIE_SAMESITE="Lax"; CSRF_COOKIE_SAMESITE="Lax"; SESSION_COOKIE_AGE=3600
 SECURE_SSL_REDIRECT=os.environ.get("DJANGO_SECURE_SSL_REDIRECT",str(not DEBUG)).lower()=="true"; SESSION_COOKIE_SECURE=CSRF_COOKIE_SECURE=not DEBUG

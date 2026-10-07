@@ -28,6 +28,15 @@ domain. The committed `railway.json` selects Railpack, starts the service with
 media requires a persistent volume or an object-storage backend because the
 default PaaS filesystem is ephemeral.
 
+Staff Login uses Google OAuth. Create a Google Cloud OAuth 2.0 **Web
+application**, register
+`https://YOUR-DOMAIN/oauth/google/login/callback/` as an authorized redirect
+URI, and add `GOOGLE_OAUTH_CLIENT_ID` and `GOOGLE_OAUTH_CLIENT_SECRET` to
+Railway Variables. Google sign-in only accepts an active portal user whose
+registered email matches the verified Google email; it never creates a public
+account. The password form remains available as an emergency administrator
+fallback.
+
 ## Security and operations
 
 The settings enforce CSRF middleware, ORM-based queries, HttpOnly/SameSite cookies, secure cookies and HSTS outside debug mode, strong passwords, clickjacking protection, and safe storage names for service attachments. Keep `DEBUG=False`, do not commit `.env`, serve HTTPS through Nginx, and restrict media/private attachments at the application layer.

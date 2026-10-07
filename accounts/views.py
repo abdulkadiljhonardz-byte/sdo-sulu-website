@@ -1,5 +1,6 @@
 import hashlib
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -27,6 +28,11 @@ class SecureLoginView(LoginView):
     template_name = "accounts/login.html"
     limit = 5
     window = 15 * 60
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["google_login_enabled"] = settings.GOOGLE_LOGIN_ENABLED
+        return context
 
     def cache_key(self):
         identifier = f"{client_ip(self.request)}:{self.request.POST.get('username', '').lower()}"
