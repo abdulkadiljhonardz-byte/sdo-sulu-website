@@ -19,6 +19,57 @@
   gap: 20px;
 }
 
+.nav-official-identity {
+  display: flex;
+  min-width: 0;
+  flex: 0 1 410px;
+  align-items: center !important;
+  gap: 13px !important;
+  color: #173d2f;
+  line-height: 1.08;
+}
+
+.nav-official-identity > img {
+  display: block;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 auto;
+  border: 2px solid #e1e9e5;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nav-official-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start !important;
+  gap: 1px !important;
+}
+
+.nav-official-copy small,
+.nav-official-copy strong { display: block; }
+
+.nav-official-copy small {
+  color: #657a70;
+  font-size: .64rem;
+  font-weight: 700;
+  letter-spacing: .065em;
+  text-transform: uppercase;
+}
+
+.nav-official-copy strong {
+  margin: 3px 0;
+  color: #07513b;
+  font-size: clamp(1.05rem, 1.55vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: -.015em;
+  white-space: nowrap;
+}
+
+.nav-official-identity:hover strong,
+.nav-official-identity:focus-visible strong { color: #d96516; }
+
 .utility-location {
   min-width: 0;
   color: #fff;
@@ -61,8 +112,11 @@
 }
 
 .main-nav {
-  border-bottom: 1px solid #dce8e2;
-  box-shadow: 0 8px 24px rgba(3, 46, 37, 0.09);
+  border-bottom: 1px solid rgba(207, 222, 215, .72) !important;
+  background: rgba(255, 255, 255, .82) !important;
+  box-shadow: 0 5px 16px rgba(3, 46, 37, .055) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  backdrop-filter: blur(14px) saturate(1.08);
 }
 
 .nav-inner {
@@ -90,6 +144,7 @@
 }
 
 .nav-links {
+  margin-left: auto;
   gap: clamp(10px, 1.25vw, 19px);
   font-size: 0.75rem;
 }
@@ -176,6 +231,17 @@
   .utility-inner {
     min-height: 34px;
   }
+
+  .nav-official-identity { flex-basis: auto; }
+
+  .nav-official-identity > img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .nav-official-copy small { font-size: .56rem; }
+
+  .nav-official-copy strong { font-size: clamp(.92rem, 2.5vw, 1.12rem); }
 
   .utility-location {
     width: 100%;
@@ -281,6 +347,17 @@
   .site-shell.utility-inner {
     width: calc(100% - 24px);
   }
+
+  .nav-official-identity { gap: 9px !important; }
+
+  .nav-official-identity > img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .nav-official-copy small { font-size: .48rem; }
+
+  .nav-official-copy strong { font-size: clamp(.78rem, 3.4vw, .96rem); }
 
   .brand small {
     font-size: 0.56rem;

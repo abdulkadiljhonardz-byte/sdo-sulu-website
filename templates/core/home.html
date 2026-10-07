@@ -11,11 +11,12 @@
   <img class="masthead-map" src="{% static 'map.png' %}?v=20260917.6" alt="" aria-hidden="true">
   <div class="masthead-lines" aria-hidden="true"></div>
   <div class="site-shell hero-official-identity">
-    <img class="hero-official-seal" src="{% static 'logosdo.jpeg' %}" alt="Schools Division Office of Sulu official seal" width="180" height="180">
-    <div class="hero-official-copy">
-      <p>Republic of the Philippines</p>
-      <h1>Schools Division Office <span>- Sulu</span></h1>
-      <p>Department of Education</p>
+    <h1 class="sr-only">Schools Division Office - Sulu</h1>
+    <div class="hero-government-marks" aria-label="Government agency marks">
+      <span class="hero-deped-symbol">
+        <img src="{% static 'deped-logo.png' %}" alt="Department of Education seal">
+      </span>
+      <img class="hero-bagong-pilipinas-logo" src="{% static 'bagong-pilipinas-logo.png' %}" alt="Bagong Pilipinas">
     </div>
   </div>
 </section>

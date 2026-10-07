@@ -42,9 +42,9 @@
   <link rel="stylesheet" href="{% static 'css/reference-hero.css' %}?v=20260916.6">
   <link rel="stylesheet" href="{% static 'css/home-enhancements.css' %}?v=20260917.5">
   <link rel="stylesheet" href="{% static 'css/mobile-nav.css' %}?v=20260917.5">
-  <link rel="stylesheet" href="{% static 'css/header-enhancements.css' %}?v=20261007.3">
+  <link rel="stylesheet" href="{% static 'css/header-enhancements.css' %}?v=20261007.7">
   <link rel="stylesheet" href="{% static 'css/human-design.css' %}?v=20260919.4">
-  <link rel="stylesheet" href="{% static 'css/home-identity.css' %}?v=20261007.1">
+  <link rel="stylesheet" href="{% static 'css/home-identity.css' %}?v=20261007.7">
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
@@ -56,7 +56,14 @@
       </div>
     </div></div>
     <nav class="main-nav" aria-label="Main navigation"><div class="site-shell nav-inner">
-      <a class="brand" href="{% url 'core:home' %}" aria-label="SDO Sulu home"><img class="brand-logo" src="{% static 'logosdo.jpeg' %}" alt="SDO Sulu official seal" width="58" height="58"><span><small>Schools Division Office</small><strong>SULU</strong></span></a>
+      <a class="nav-official-identity" href="{% url 'core:home' %}" aria-label="Schools Division Office - Sulu home">
+        <img src="{% static 'logosdo.jpeg' %}" alt="" width="58" height="58">
+        <span class="nav-official-copy">
+          <small>Republic of the Philippines</small>
+          <strong>Schools Division Office - Sulu</strong>
+          <small>Department of Education</small>
+        </span>
+      </a>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-menu"><span class="sr-only">Open navigation menu</span><span></span><span></span><span></span></button>
       <div id="primary-menu" class="nav-links">
         <div class="mobile-menu-brand" aria-hidden="true"><img src="{% static 'logosdo.jpeg' %}" alt="" width="54" height="54"><span><small>Schools Division Office</small><strong>SULU</strong></span></div>
@@ -80,10 +87,6 @@
           </div>
         </div>
         <a href="{% url 'content:news' %}"{% if request.resolver_match.namespace == 'content' %} class="is-current" aria-current="page"{% endif %}>Notice</a><a href="{% url 'schools:directory' %}"{% if request.resolver_match.namespace == 'schools' %} class="is-current" aria-current="page"{% endif %}>Schools</a><a href="{% url 'events:list' %}"{% if request.resolver_match.namespace == 'events' %} class="is-current" aria-current="page"{% endif %}>Events</a><a class="nav-search{% if request.resolver_match.url_name == 'search' %} is-current{% endif %}" href="{% url 'core:search' %}" aria-label="Search portal"><svg aria-hidden="true"><use href="#icon-search"/></svg></a>
-      </div>
-      <div class="nav-government-marks" aria-label="Government agency marks">
-        <img class="nav-deped-logo" src="{% static 'deped-logo.png' %}" alt="Department of Education">
-        <img class="nav-bagong-pilipinas-logo" src="{% static 'bagong-pilipinas-logo.png' %}" alt="Bagong Pilipinas">
       </div>
       <button class="mobile-nav-backdrop" type="button" tabindex="-1" aria-label="Close navigation menu"></button>
     </div></nav>
