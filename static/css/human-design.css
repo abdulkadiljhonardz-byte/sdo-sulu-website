@@ -56,6 +56,10 @@ a, button { transition-duration: 140ms; }
   min-height: 500px;
   padding: 60px 0;
 }
+.portal-hero-sidebar-only {
+  grid-template-columns: minmax(330px, .72fr);
+  justify-content: end;
+}
 .portal-hero-copy { max-width: 650px; }
 .portal-kicker, .section-overline {
   margin: 0 0 13px;
