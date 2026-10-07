@@ -1,7 +1,10 @@
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import Sum
 from django.test import TestCase
 from django.urls import reverse
 
+from accounts.models import Role, User
+from accounts.roles import synchronize_role_permissions
 from offices.models import District
 
 from .models import School
@@ -43,3 +46,67 @@ class SchoolDirectoryTests(TestCase):
         self.assertContains(response, "Find a school in Sulu.")
         self.assertNotContains(response, "Public-school targets")
         self.assertNotContains(response, "target total is calculated")
+
+
+class SchoolAdminImportTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_superuser(
+            "schooladmin",
+            "schooladmin@example.com",
+            "StrongPass!234",
+        )
+        self.client.force_login(self.admin)
+
+    def test_school_admin_has_bulk_import_link(self):
+        response = self.client.get(reverse("admin:schools_school_changelist"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Import CSV/Excel")
+
+    def test_admin_can_import_school_csv(self):
+        district = District.objects.get(name="Indanan")
+        spreadsheet = SimpleUploadedFile(
+            "schools.csv",
+            (
+                "school_id,name,district,classification,municipality\n"
+                f"SULU-IMPORT-1,Imported School,{district.name},PUBLIC,Indanan\n"
+            ).encode(),
+            content_type="text/csv",
+        )
+
+        response = self.client.post(
+            reverse("admin:schools_school_import"),
+            {"spreadsheet": spreadsheet},
+        )
+
+        self.assertRedirects(response, reverse("admin:schools_school_changelist"))
+        self.assertTrue(School.objects.filter(school_id="SULU-IMPORT-1").exists())
+
+    def test_invalid_import_is_not_saved(self):
+        spreadsheet = SimpleUploadedFile(
+            "schools.csv",
+            b"school_id,name,district,classification,municipality\nBAD-1,Bad School,Unknown,PUBLIC,Jolo\n",
+            content_type="text/csv",
+        )
+
+        response = self.client.post(
+            reverse("admin:schools_school_import"),
+            {"spreadsheet": spreadsheet},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "unknown or inactive district Unknown")
+        self.assertFalse(School.objects.filter(school_id="BAD-1").exists())
+
+    def test_regular_staff_cannot_use_bulk_import(self):
+        staff = User.objects.create_user(
+            "schoolstaff",
+            password="StrongPass!234",
+            role=Role.STAFF,
+        )
+        synchronize_role_permissions(staff)
+        self.client.force_login(staff)
+
+        response = self.client.get(reverse("admin:schools_school_import"))
+
+        self.assertEqual(response.status_code, 403)

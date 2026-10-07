@@ -1,0 +1,43 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% translate "Home" %}</a>
+  &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+  &rsaquo; Import
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <div class="module">
+    <h2>School data import</h2>
+    <p>Upload a CSV or Excel file. Existing School IDs are updated; new IDs are created.</p>
+    <p>
+      <a href="{% url 'core:import_template' 'schools' 'xlsx' %}">Download Excel template</a>
+      &nbsp;·&nbsp;
+      <a href="{% url 'core:import_template' 'schools' 'csv' %}">Download CSV template</a>
+    </p>
+  </div>
+
+  {% if import_errors %}
+  <div class="errornote">
+    <strong>Import was not saved.</strong>
+    <ul>{% for error in import_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <fieldset class="module aligned">
+      {{ form.as_div }}
+    </fieldset>
+    <div class="submit-row">
+      <input type="submit" value="Import schools" class="default">
+      <a href="{% url opts|admin_urlname:'changelist' %}" class="closelink">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
