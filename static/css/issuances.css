@@ -1,8 +1,10 @@
+.issuance-page { padding-top: 18px; }
+
 .issuance-breadcrumb {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 18px 0;
+  padding: 10px 0 12px;
   border-bottom: 1px solid #dce5e0;
   color: #718079;
   font-size: .73rem;
@@ -12,7 +14,7 @@
 
 .issuance-archive-heading {
   max-width: 820px;
-  padding: 38px 0 28px;
+  padding: 22px 0 18px;
 }
 .issuance-archive-heading > p {
   margin: 0 0 7px;
@@ -26,13 +28,13 @@
   margin: 0;
   color: #123f32;
   font-family: "Libre Baskerville", serif;
-  font-size: clamp(2.1rem, 4.7vw, 3.65rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.12;
 }
 .issuance-archive-heading > span {
   display: block;
   max-width: 680px;
-  margin-top: 11px;
+  margin-top: 8px;
   color: #62746c;
   line-height: 1.6;
 }
@@ -40,7 +42,7 @@
 .issuance-archive-layout {
   display: grid;
   grid-template-columns: minmax(180px, .68fr) minmax(0, 2fr) minmax(180px, .68fr);
-  gap: clamp(24px, 4vw, 48px);
+  gap: clamp(20px, 3vw, 34px);
   align-items: start;
   padding: 8px 0 56px;
 }
@@ -72,7 +74,7 @@
   background: #176347;
 }
 
-.issuance-archive-search { margin-bottom: 18px; }
+.issuance-archive-search { margin-bottom: 12px; }
 .issuance-archive-search > label {
   display: block;
   margin-bottom: 6px;
@@ -109,7 +111,7 @@
 
 .issuance-entry-list { border-top: 1px solid #cad8d1; }
 .issuance-entry {
-  padding: 22px 4px 21px;
+  padding: 16px 4px;
   border-bottom: 1px solid #d9e3de;
 }
 .issuance-entry:hover { background: linear-gradient(90deg, #f5f8f6, transparent); }

@@ -1,7 +1,8 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block title %}{{ category_label }} — SDO Sulu{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'css/issuances.css' %}?v=20261007.1">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/issuances.css' %}?v=20261007.2">{% endblock %}
+{% block main_class %}page-main site-shell issuance-page{% endblock %}
 {% block content %}
 <nav class="issuance-breadcrumb" aria-label="Breadcrumb"><a href="{% url 'core:home' %}">Home</a><span aria-hidden="true">›</span><span>Issuances</span>{% if category %}<span aria-hidden="true">›</span><strong>{{ category_label }}</strong>{% endif %}</nav>
 
