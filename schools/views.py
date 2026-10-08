@@ -1,4 +1,3 @@
-from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from core.analytics import record_event
@@ -23,13 +22,13 @@ def directory(request):
         schools = schools.filter(district_id=selected_district)
 
     districts = District.objects.filter(active=True).order_by("name")
-    page = Paginator(schools.order_by("name"), 20).get_page(request.GET.get("page"))
+    schools = schools.order_by("district__name", "name")
     return render(
         request,
         "schools/directory.html",
         {
-            "schools": page,
-            "page": page,
+            "schools": schools,
+            "result_count": schools.count(),
             "districts": districts,
             "district_count": districts.count(),
             "query": query,

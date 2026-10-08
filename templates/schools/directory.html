@@ -1,16 +1,17 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block title %}School Directory — SDO Sulu{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'css/school-directory.css' %}?v=20261007.1">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'css/school-directory.css' %}?v=20261007.2">{% endblock %}
 {% block content %}
 <header class="school-directory-heading">
-  <h1>School Directory</h1>
+  <p>Schools Division Office - Sulu</p>
+  <h1>Sulu Schools</h1>
   <p>Find a school in Sulu.</p>
 </header>
 
 <section class="school-summary" aria-label="Directory summary">
-  <span><strong>{{ district_count }}</strong> Districts</span>
-  <span><strong>{{ page.paginator.count }}</strong> Results</span>
+  <span><strong>{{ district_count }}</strong> School districts</span>
+  <span><strong>{{ result_count }}</strong> Schools listed</span>
 </section>
 
 <section class="school-results" id="school-results">
@@ -21,22 +22,32 @@
     {% if query or selected_district %}<a href="{% url 'schools:directory' %}">Clear</a>{% endif %}
   </form>
 
-  <div class="school-result-list">
-    {% for school in schools %}
-    <a href="{% url 'schools:detail' school.pk %}">
-      <span class="school-result-icon"><svg aria-hidden="true"><use href="#icon-school"/></svg></span>
-      <span><small>{{ school.school_id }} · {{ school.get_classification_display }}</small><strong>{{ school.name }}</strong><em>{% if school.district %}{{ school.district.name }}{% else %}District pending validation{% endif %}{% if school.municipality %} · {{ school.municipality }}{% endif %}</em></span>
-      <b>View <svg aria-hidden="true"><use href="#icon-arrow"/></svg></b>
-    </a>
-    {% empty %}
-    <div class="school-empty"><svg aria-hidden="true"><use href="#icon-school"/></svg><strong>No schools found.</strong></div>
+  {% if schools %}
+  <div class="school-level-heading"><span>Official directory</span><h2>Public Schools</h2></div>
+  {% regroup schools by district as school_groups %}
+  <div class="school-district-list">
+    {% for school_group in school_groups %}
+    <section class="school-district-section" aria-labelledby="district-{{ forloop.counter }}">
+      <header class="school-district-heading">
+        <div><p>School district</p><h2 id="district-{{ forloop.counter }}">{% if school_group.grouper %}{{ school_group.grouper.name }}{% else %}District pending validation{% endif %}</h2>{% if school_group.grouper.municipality %}<small>{{ school_group.grouper.municipality }}</small>{% endif %}</div>
+        <span><strong>{{ school_group.list|length }}</strong> school{{ school_group.list|length|pluralize }}</span>
+      </header>
+      <div class="school-table-scroll" tabindex="0" role="region" aria-label="Schools in {% if school_group.grouper %}{{ school_group.grouper.name }}{% else %}unassigned district{% endif %}">
+        <table class="school-directory-table">
+          <thead><tr><th scope="col">School ID</th><th scope="col">School name</th><th scope="col">School head</th><th scope="col">Contact / details</th></tr></thead>
+          <tbody>{% for school in school_group.list %}<tr>
+            <td><span class="school-id">{{ school.school_id }}</span></td>
+            <td><a class="school-name" href="{% url 'schools:detail' school.pk %}">{{ school.name }}</a>{% if school.municipality or school.barangay %}<small>{% if school.barangay %}{{ school.barangay }}{% if school.municipality %}, {% endif %}{% endif %}{{ school.municipality }}</small>{% endif %}</td>
+            <td>{{ school.school_head|default:"—" }}</td>
+            <td>{% if school.email %}<a class="school-contact" href="mailto:{{ school.email }}">{{ school.email }}</a>{% elif school.contact_number %}<a class="school-contact" href="tel:{{ school.contact_number }}">{{ school.contact_number }}</a>{% else %}<a class="school-detail-link" href="{% url 'schools:detail' school.pk %}">View school <svg aria-hidden="true"><use href="#icon-arrow"/></svg></a>{% endif %}</td>
+          </tr>{% endfor %}</tbody>
+        </table>
+      </div>
+    </section>
     {% endfor %}
   </div>
-
-  {% if page.paginator.num_pages > 1 %}<nav class="school-pagination" aria-label="School directory pages">
-    {% if page.has_previous %}<a href="?q={{ query|urlencode }}&district={{ selected_district|urlencode }}&page={{ page.previous_page_number }}#school-results">Previous</a>{% endif %}
-    <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
-    {% if page.has_next %}<a href="?q={{ query|urlencode }}&district={{ selected_district|urlencode }}&page={{ page.next_page_number }}#school-results">Next</a>{% endif %}
-  </nav>{% endif %}
+  {% else %}
+    <div class="school-empty"><svg aria-hidden="true"><use href="#icon-school"/></svg><strong>No schools found.</strong></div>
+  {% endif %}
 </section>
 {% endblock %}

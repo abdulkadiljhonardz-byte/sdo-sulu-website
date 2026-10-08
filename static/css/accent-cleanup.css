@@ -1,0 +1,48 @@
+/* Keep orange as an interaction color, not as a decorative container rule. */
+.utility-bar::before,
+.school-directory-heading::after,
+.footer-accent {
+  display: none;
+}
+
+.home-masthead,
+.home-masthead.home-masthead-visual-only {
+  border-bottom: 0 !important;
+}
+
+.hero-featured-advisory,
+.division-overview,
+.contact-hours,
+.about-government-marks {
+  border-left-width: 0 !important;
+}
+
+.division-overview { padding-left: 0; }
+
+.service-link-list,
+.mission-vision-grid > section,
+.legal-foundation-reference,
+.publication-card.important {
+  border-top-width: 0 !important;
+}
+
+.public-information-page > header,
+.contact-heading {
+  border-bottom-color: #d9e5df !important;
+  border-bottom-width: 1px !important;
+}
+
+.official-contact-grid > a,
+.official-contact-grid > div {
+  border-left-color: #d7e5de !important;
+  border-left-width: 1px !important;
+}
+
+.school-level-heading {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.school-district-heading { border-bottom: 0; }
+
+.editorial-card:first-child { border-top-color: #07513b; }

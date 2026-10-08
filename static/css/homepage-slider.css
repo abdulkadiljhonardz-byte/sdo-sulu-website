@@ -3,12 +3,15 @@
   background: #f5f8f6;
 }
 
-.carousel-shell { position: relative; }
+.carousel-shell {
+  position: relative;
+  width: min(980px, calc(100% - 40px));
+}
 
 .carousel-viewport {
   position: relative;
-  min-height: 300px;
-  aspect-ratio: 16 / 5.6;
+  min-height: 260px;
+  aspect-ratio: 16 / 5.4;
   overflow: hidden;
   border: 1px solid #d9e3de;
   background: #161a18;
@@ -114,11 +117,66 @@
 .carousel-indicators button.is-active { width: 25px; background: #df7d29; }
 
 @media (max-width: 700px) {
-  .homepage-carousel { padding: 18px 0 8px; }
-  .carousel-viewport { min-height: 390px; aspect-ratio: 4 / 5; }
-  .carousel-copy { top: auto; right: 22px; bottom: 28px; left: 22px; width: auto; transform: none; }
-  .carousel-copy h2 { font-size: 1.65rem; }
-  .carousel-copy > span { font-size: .82rem; line-height: 1.5; }
+  .homepage-carousel { padding: 14px 0 6px; }
+
+  .carousel-viewport {
+    height: clamp(170px, 48vw, 240px);
+    min-height: 0;
+    aspect-ratio: auto;
+    border-radius: 6px;
+  }
+
+  .carousel-slide::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 30% 0 0;
+    background: linear-gradient(0deg, rgba(5, 27, 21, .86), rgba(5, 27, 21, 0));
+    pointer-events: none;
+  }
+
+  .carousel-copy {
+    top: auto;
+    right: 16px;
+    bottom: 14px;
+    left: 16px;
+    width: auto;
+    transform: none;
+  }
+
+  .carousel-copy h2 {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: clamp(1.05rem, 4.6vw, 1.35rem);
+    line-height: 1.2;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .carousel-copy > span { display: none; }
+
+  .carousel-copy > a {
+    margin-top: 9px;
+    padding: 7px 10px;
+    font-size: .68rem;
+  }
+
+  .carousel-controls { gap: 11px; padding-top: 9px; }
+
+  .carousel-controls > button {
+    width: 30px;
+    height: 30px;
+  }
+
+  .carousel-controls > button span { font-size: 1.2rem; }
+  .carousel-indicators { gap: 6px; }
+  .carousel-indicators button { width: 7px; height: 7px; }
+  .carousel-indicators button.is-active { width: 20px; }
+}
+
+@media (max-width: 400px) {
+  .carousel-viewport { height: 170px; }
+  .carousel-copy h2 { font-size: 1.02rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

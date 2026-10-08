@@ -4,15 +4,17 @@
     linear-gradient(0deg, rgba(4, 31, 24, .34), transparent 58%);
 }
 
+.home-masthead.home-masthead-visual-only { min-height: 380px; }
+
 .hero-official-identity {
   position: relative;
   z-index: 3;
   display: flex;
   align-items: start;
   justify-content: flex-end;
-  min-height: 500px;
-  padding-top: 44px;
-  padding-bottom: 44px;
+  min-height: 380px;
+  padding-top: 32px;
+  padding-bottom: 32px;
   color: #fff;
 }
 
@@ -110,10 +112,12 @@
 }
 
 @media (max-width: 900px) {
+  .home-masthead.home-masthead-visual-only { min-height: 340px; }
+
   .hero-official-identity {
-    min-height: 440px;
-    padding-top: 36px;
-    padding-bottom: 36px;
+    min-height: 340px;
+    padding-top: 28px;
+    padding-bottom: 28px;
   }
 
   .hero-official-brand { gap: 16px; }
@@ -131,15 +135,15 @@
 }
 
 @media (max-width: 700px) {
-  .home-masthead.home-masthead-visual-only { min-height: 440px; }
+  .home-masthead.home-masthead-visual-only { min-height: 300px; }
 
   .hero-official-identity {
     display: flex;
     align-items: start;
     justify-content: flex-end;
-    min-height: 440px;
-    padding-top: 28px;
-    padding-bottom: 28px;
+    min-height: 300px;
+    padding-top: 22px;
+    padding-bottom: 22px;
     text-align: left;
   }
 

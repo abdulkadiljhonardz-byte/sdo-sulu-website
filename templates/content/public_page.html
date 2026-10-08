@@ -10,6 +10,17 @@
   {% if page.image %}<img src="{{ page.image.url }}" alt="{{ page.title }}">{% endif %}
   {% if page.slug != 'citizens-charter' %}<div class="public-page-body">{{ page.body|linebreaks }}</div>{% endif %}
   {% if page.slug == 'about' %}
+  <section class="legal-foundation-reference" aria-labelledby="legal-reference-title">
+    <header><p>Historical legal reference</p><h2 id="legal-reference-title">Republic Act No. 3564</h2><span>Approved June 21, 1963</span></header>
+    <p class="legal-foundation-copy">Republic Act No. 3564 provided for two school divisions in the then Province of Sulu beginning in School Year 1963–1964. It is presented here as part of the historical legal background of education administration in Sulu.</p>
+    <dl><div><dt>Subject</dt><dd>Two school divisions in the Province of Sulu</dd></div><div><dt>Implementation</dt><dd>Beginning School Year 1963–1964</dd></div></dl>
+    <div class="legal-reference-links">
+      <a href="https://lawphil.net/statutes/repacts/ra1963/ra_3564_1963.html" target="_blank" rel="noopener noreferrer">Read the full law on Lawphil <svg aria-hidden="true"><use href="#icon-external"/></svg></a>
+      <a href="https://jur.ph/law/establishment-of-two-school-divisions-in-sulu" target="_blank" rel="noopener noreferrer">View the Jur.ph reference <svg aria-hidden="true"><use href="#icon-external"/></svg></a>
+    </div>
+  </section>
+  {% endif %}
+  {% if page.slug == 'about' %}
   <section class="about-government-marks" aria-label="Government marks">
     <p>In support of national education and public service</p>
     <div><img src="{% static 'deped-logo.png' %}" alt="Department of Education"><img src="{% static 'bagong-pilipinas-logo.png' %}" alt="Bagong Pilipinas"></div>
