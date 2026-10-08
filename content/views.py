@@ -1,5 +1,6 @@
 import hashlib
 
+from django.conf import settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.core.paginator import Paginator
@@ -25,7 +26,7 @@ def _published(model):
     ).filter(Q(expires_at__isnull=True) | Q(expires_at__gt=now))
 
 
-def _publication_list(request, model, template):
+def _publication_list(request, model, template, extra_context=None):
     query = request.GET.get("q", "").strip()
     items = _published(model).select_related("office", "author")
     if query:
@@ -35,11 +36,19 @@ def _publication_list(request, model, template):
             | Q(category__icontains=query)
         )
     page = Paginator(items, 9).get_page(request.GET.get("page"))
-    return render(request, template, {"page": page, "items": page, "query": query})
+    context = {"page": page, "items": page, "query": query}
+    if extra_context:
+        context.update(extra_context)
+    return render(request, template, context)
 
 
 def news_list(request):
-    return _publication_list(request, News, "content/news_list.html")
+    return _publication_list(
+        request,
+        News,
+        "content/news_list.html",
+        {"facebook_page_url": settings.FACEBOOK_PAGE_URL},
+    )
 
 
 def news_detail(request, slug):

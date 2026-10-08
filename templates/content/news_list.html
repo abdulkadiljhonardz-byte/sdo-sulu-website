@@ -1,8 +1,74 @@
 {% extends 'base/base.html' %}
 {% block title %}Notice — SDO Sulu{% endblock %}
 {% block content %}
-<header class="publication-index-heading"><div><p>Official notices</p><h1>Notice</h1><span>Official updates, programs, and activities of the Schools Division Office of Sulu.</span></div></header>
-<form method="get" class="publication-search" role="search"><label for="news-search">Search notices</label><div><input id="news-search" type="search" name="q" value="{{ query }}" placeholder="Search by title, caption, or category"><button type="submit">Search</button></div></form>
-<div class="publication-card-grid">{% for item in page %}<article class="publication-card"><a class="publication-card-image" href="{% url 'content:news_detail' item.slug %}">{% if item.cover_image %}<img src="{{ item.cover_image.url }}" alt="Cover photo for {{ item.title }}">{% else %}<span>SDO SULU</span>{% endif %}</a><div><p>{{ item.category|default:"Division Notice" }}{% if item.office %} · {{ item.office }}{% endif %}</p><h2><a href="{% url 'content:news_detail' item.slug %}">{{ item.title }}</a></h2><span>{{ item.body|striptags|truncatewords:25 }}</span><small>{{ item.published_at|date:"F d, Y" }}</small></div></article>{% empty %}<p class="publication-empty">No published notices matched your search.</p>{% endfor %}</div>
-{% include 'content/publication_pagination.html' %}
+<header class="publication-index-heading news-index-heading">
+  <div>
+    <p>Official notices</p>
+    <h1>News and Updates</h1>
+    <span>Official programs, activities, and announcements from the Schools Division Office of Sulu.</span>
+  </div>
+</header>
+
+<div class="news-page-layout">
+  <main class="news-stream" aria-label="News and notice results">
+    <form method="get" class="publication-search news-search" role="search">
+      <label for="news-search">Search news and notices</label>
+      <div>
+        <input id="news-search" type="search" name="q" value="{{ query }}" placeholder="Search by title, caption, or category">
+        <button type="submit">Search</button>
+      </div>
+    </form>
+
+    <div class="news-list">
+      {% for item in page %}
+      <article class="news-list-card">
+        <a class="news-list-image" href="{% url 'content:news_detail' item.slug %}" aria-label="Read {{ item.title }}">
+          {% if item.cover_image %}
+          <img src="{{ item.cover_image.url }}" alt="Cover photo for {{ item.title }}"{% if not forloop.first %} loading="lazy"{% endif %}>
+          {% else %}
+          <span>SDO SULU</span>
+          {% endif %}
+        </a>
+        <div class="news-list-copy">
+          <p>{{ item.category|default:"Division Notice" }}{% if item.office %} · {{ item.office }}{% endif %}</p>
+          <h2><a href="{% url 'content:news_detail' item.slug %}">{{ item.title }}</a></h2>
+          <span>{{ item.body|striptags|truncatewords:30 }}</span>
+          <footer>
+            <time{% if item.published_at %} datetime="{{ item.published_at|date:'Y-m-d' }}"{% endif %}>{{ item.published_at|date:"F d, Y" }}</time>
+            <a href="{% url 'content:news_detail' item.slug %}">Read full update <span aria-hidden="true">→</span></a>
+          </footer>
+        </div>
+      </article>
+      {% empty %}
+      <p class="publication-empty">No published notices matched your search.</p>
+      {% endfor %}
+    </div>
+
+    {% include 'content/publication_pagination.html' %}
+  </main>
+
+  <aside class="facebook-updates" aria-labelledby="facebook-updates-title">
+    <div class="facebook-updates-heading">
+      <span aria-hidden="true">f</span>
+      <div>
+        <small>Official social media</small>
+        <h2 id="facebook-updates-title">Facebook Updates</h2>
+      </div>
+    </div>
+    <div class="facebook-page-frame">
+      <iframe
+        title="Official SDO Sulu Facebook Page updates"
+        src="https://www.facebook.com/plugins/page.php?href={{ facebook_page_url|urlencode:"" }}&amp;tabs=timeline&amp;width=360&amp;height=700&amp;small_header=false&amp;adapt_container_width=true&amp;hide_cover=false&amp;show_facepile=true"
+        width="360"
+        height="700"
+        loading="lazy"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <a class="facebook-page-link" href="{{ facebook_page_url }}" target="_blank" rel="noopener noreferrer">
+      Open the SDO Sulu Facebook Page <span aria-hidden="true">↗</span>
+    </a>
+  </aside>
+</div>
 {% endblock %}
