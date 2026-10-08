@@ -69,7 +69,7 @@
         <div class="mobile-menu-brand" aria-hidden="true"><img src="{% static 'logosdo.jpeg' %}" alt="" width="54" height="54"><span><small>Schools Division Office</small><strong>SULU</strong></span></div>
         <a href="{% url 'core:home' %}"{% if request.resolver_match.namespace == 'core' and request.resolver_match.url_name == 'home' %} class="is-current" aria-current="page"{% endif %}>Home</a>
         <div class="nav-dropdown{% if request.resolver_match.namespace == 'issuances' %} is-current{% endif %}">
-          <div class="nav-trigger-row"><a class="nav-dropdown-trigger" href="{% url 'issuances:list' %}" aria-haspopup="true">Issuances <span aria-hidden="true">▾</span></a><button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="issuances-submenu"><span class="sr-only">Show Issuances submenu</span><i aria-hidden="true"></i></button></div>
+          <div class="nav-trigger-row"><span class="nav-dropdown-trigger">Issuances <span aria-hidden="true">▾</span></span><button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="issuances-submenu"><span class="sr-only">Show Issuances submenu</span><i aria-hidden="true"></i></button></div>
           <div id="issuances-submenu" class="nav-dropdown-menu" aria-label="Issuance categories">
             <a href="{% url 'issuances:list' %}?category=DIVISION_MEMO"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Division Memo</span></a>
             <a href="{% url 'issuances:list' %}?category=DIVISION_ADVISORY"><svg aria-hidden="true"><use href="#icon-message"/></svg><span>Division Advisory</span></a>
@@ -79,7 +79,7 @@
           </div>
         </div>
         <div class="nav-dropdown{% if request.resolver_match.namespace == 'pages' %} is-current{% endif %}">
-          <div class="nav-trigger-row"><a class="nav-dropdown-trigger" href="{% url 'pages:detail' 'about' %}" aria-haspopup="true">About <span aria-hidden="true">▾</span></a><button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="about-submenu"><span class="sr-only">Show About submenu</span><i aria-hidden="true"></i></button></div>
+          <div class="nav-trigger-row"><span class="nav-dropdown-trigger">About <span aria-hidden="true">▾</span></span><button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="about-submenu"><span class="sr-only">Show About submenu</span><i aria-hidden="true"></i></button></div>
           <div id="about-submenu" class="nav-dropdown-menu" aria-label="About SDO Sulu">
             <a href="{% url 'pages:mission_vision' %}"><svg aria-hidden="true"><use href="#icon-target"/></svg><span>Mission and Vision</span></a>
             <a href="{% url 'pages:detail' 'citizens-charter' %}"><svg aria-hidden="true"><use href="#icon-document"/></svg><span>Citizens Charter</span></a>
